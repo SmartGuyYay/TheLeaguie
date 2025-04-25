@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>NRL Animation</title>
+  <title>Rugby Overlay Animation</title>
   <style>
     html, body {
       margin: 0;
@@ -76,6 +76,11 @@
       text-shadow: 0 0 20px #ff6600, 0 0 50px #ff6600;
     }
 
+    .notry .message {
+      color: #ff0000;
+      text-shadow: 0 0 20px #ff0000, 0 0 50px #ff0000;
+    }
+
     @keyframes appearSpin {
       0% {
         transform: scale(0.5) rotate(0deg);
@@ -127,6 +132,7 @@
     if (key === 'g') showMessage('goal', 'GOAL');
     if (key === 'p') showMessage('penalty', 'PENALTY');
     if (key === 'c') showMessage('challenge', "CAPTAIN'S CHALLENGE");
+    if (key === 'n') showMessage('notry', 'NO TRY');
   });
 
   window.onload = hideMessage;
