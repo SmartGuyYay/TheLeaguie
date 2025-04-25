@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rugby Overlay Animation</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: black;
+      overflow: hidden;
+      font-family: 'Arial Black', sans-serif;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .show {
+      opacity: 1;
+      animation: appearSpin 5s ease-out forwards;
+    }
+
+    .message {
+      font-size: 6em;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .try .message {
+      color: #ffcc00;
+      text-shadow: 0 0 20px #ffcc00, 0 0 50px #ffcc00;
+    }
+
+    .goal .message {
+      color: #00ff00;
+      text-shadow: 0 0 20px #00ff00, 0 0 50px #00ff00;
+    }
+
+    .penalty .message {
+      color: #ffffff;
+      text-shadow: 0 0 20px #ffffff, 0 0 50px #ffffff;
+    }
+
+    .challenge .message {
+      color: #ff6600;
+      text-shadow: 0 0 20px #ff6600, 0 0 50px #ff6600;
+    }
+
+    @keyframes appearSpin {
+      0% {
+        transform: scale(0.5) rotate(0deg);
+        opacity: 0;
+      }
+      30% {
+        transform: scale(1.2) rotate(360deg);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1) rotate(720deg);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="overlay" class="overlay">
+  <div id="message" class="message">TEXT</div>
+</div>
+
+<script>
+  const overlay = document.getElementById('overlay');
+  const message = document.getElementById('message');
+
+  function hideMessage() {
+    overlay.className = 'overlay';
+    message.textContent = '';
+  }
+
+  function showMessage(type, text) {
+    overlay.className = 'overlay'; // Reset all classes
+    message.textContent = text;
+    overlay.classList.add('show', type);
+    setTimeout(hideMessage, 5000); // 5 seconds
+  }
+
+  document.addEventListener('keydown', e => {
+    const key = e.key.toLowerCase();
+    if (key === 't') showMessage('try', 'TRY');
+    if (key === 'g') showMessage('goal', 'GOAL');
+    if (key === 'p') showMessage('penalty', 'PENALTY');
+    if (key === 'c') showMessage('challenge', "CAPTAIN'S CHALLENGE");
+  });
+
+  window.onload = hideMessage;
+</script>
+
+</body>
+</html>
