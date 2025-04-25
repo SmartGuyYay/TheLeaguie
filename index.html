@@ -8,18 +8,35 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      background: black;
       overflow: hidden;
       font-family: 'Arial Black', sans-serif;
     }
 
+    /* Background fade layer */
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      opacity: 0;
+      z-index: 998;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+    .background.show {
+      opacity: 1;
+    }
+
+    /* Overlay animation layer */
     .overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.85);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -28,7 +45,7 @@
       z-index: 999;
     }
 
-    .show {
+    .overlay.show {
       opacity: 1;
       animation: appearSpin 5s ease-out forwards;
     }
@@ -77,6 +94,10 @@
 </head>
 <body>
 
+<!-- Background -->
+<div id="background" class="background"></div>
+
+<!-- Overlay -->
 <div id="overlay" class="overlay">
   <div id="message" class="message">TEXT</div>
 </div>
@@ -84,16 +105,19 @@
 <script>
   const overlay = document.getElementById('overlay');
   const message = document.getElementById('message');
+  const background = document.getElementById('background');
 
   function hideMessage() {
     overlay.className = 'overlay';
     message.textContent = '';
+    background.classList.remove('show');
   }
 
   function showMessage(type, text) {
-    overlay.className = 'overlay'; // Reset all classes
+    hideMessage();
     message.textContent = text;
     overlay.classList.add('show', type);
+    background.classList.add('show');
     setTimeout(hideMessage, 5000); // 5 seconds
   }
 
