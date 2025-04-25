@@ -1,0 +1,44 @@
+<!-- admin.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Overlay Controller</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 40px;
+    }
+
+    button {
+      font-size: 2rem;
+      margin: 10px;
+      padding: 20px 40px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Overlay Control Panel</h1>
+
+<button onclick="sendTrigger('try', 'TRY')">TRY</button>
+<button onclick="sendTrigger('goal', 'GOAL')">GOAL</button>
+<button onclick="sendTrigger('penalty', 'PENALTY')">PENALTY</button>
+<button onclick="sendTrigger('challenge', \"CAPTAIN'S CHALLENGE\")">CAPTAIN'S CHALLENGE</button>
+
+<script>
+  function sendTrigger(type, text) {
+    fetch('trigger.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ trigger: true, type, text })
+    });
+  }
+</script>
+
+</body>
+</html>
