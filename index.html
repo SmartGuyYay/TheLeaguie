@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,9 +11,9 @@
       height: 100%;
       overflow: hidden;
       font-family: 'Arial Black', sans-serif;
+      background: black;
     }
 
-    /* Background fade layer */
     .background {
       position: fixed;
       top: 0;
@@ -30,7 +31,6 @@
       opacity: 1;
     }
 
-    /* Overlay animation layer */
     .overlay {
       position: fixed;
       top: 0;
@@ -94,10 +94,8 @@
 </head>
 <body>
 
-<!-- Background -->
 <div id="background" class="background"></div>
 
-<!-- Overlay -->
 <div id="overlay" class="overlay">
   <div id="message" class="message">TEXT</div>
 </div>
@@ -118,18 +116,22 @@
     message.textContent = text;
     overlay.classList.add('show', type);
     background.classList.add('show');
-    setTimeout(hideMessage, 5000); // 5 seconds
+    setTimeout(hideMessage, 5000);
   }
 
-  document.addEventListener('keydown', e => {
-    const key = e.key.toLowerCase();
-    if (key === 't') showMessage('try', 'TRY');
-    if (key === 'g') showMessage('goal', 'GOAL');
-    if (key === 'p') showMessage('penalty', 'PENALTY');
-    if (key === 'c') showMessage('challenge', "CAPTAIN'S CHALLENGE");
-  });
+  async function pollTrigger() {
+    const res = await fetch('trigger.json');
+    const data = await res.json();
 
-  window.onload = hideMessage;
+    if (data.trigger) {
+      showMessage(data.type, data.text);
+      await fetch('clear_trigger.php'); // Resets it
+    }
+
+    setTimeout(pollTrigger, 1000);
+  }
+
+  pollTrigger();
 </script>
 
 </body>
