@@ -10,9 +10,9 @@
       height: 100%;
       overflow: hidden;
       font-family: 'Arial Black', sans-serif;
+      background: black;
     }
 
-    /* Background fade layer */
     .background {
       position: fixed;
       top: 0;
@@ -30,7 +30,6 @@
       opacity: 1;
     }
 
-    /* Overlay animation layer */
     .overlay {
       position: fixed;
       top: 0;
@@ -86,47 +85,58 @@
       text-shadow: 0 0 20px #00bfff, 0 0 50px #00bfff;
     }
 
-    /* Yellow line reveal */
+    /* YELLOW LINE ANIMATION */
     .yellow-line-container {
       position: fixed;
-      top: 50%;
+      top: 0;
       left: 0;
       width: 100%;
-      height: 80px;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      height: 100%;
       z-index: 1000;
       pointer-events: none;
     }
 
     .yellow-line {
+      position: absolute;
+      width: 10px;
+      height: 0;
       background: yellow;
-      height: 10px;
-      width: 0%;
       box-shadow: 0 0 20px yellow, 0 0 40px yellow;
-      animation: revealLine 1s forwards;
+      animation: growLine 1s forwards;
     }
 
-    .yellow-text {
-      color: black;
-      font-size: 3em;
-      font-weight: bold;
+    .yellow-line.left {
+      left: 100px;
+      top: 0;
+    }
+
+    .yellow-line.right {
+      right: 100px;
+      top: 0;
+    }
+
+    .yellow-line-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 4em;
+      color: yellow;
+      text-shadow: 0 0 10px yellow, 0 0 30px yellow;
+      animation: fadeIn 1s forwards;
       opacity: 0;
-      margin-left: 10px;
-      animation: showText 1s forwards;
-      animation-delay: 1s;
     }
 
-    @keyframes revealLine {
-      0% { width: 0%; }
-      100% { width: 80%; }
+    @keyframes growLine {
+      to {
+        height: 100%;
+      }
     }
 
-    @keyframes showText {
-      0% { opacity: 0; transform: translateX(-20px); }
-      100% { opacity: 1; transform: translateX(0); }
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
     }
 
     @keyframes appearSpin {
@@ -155,14 +165,14 @@
   <div id="message" class="message">TEXT</div>
 </div>
 
-<!-- Container for yellow line and text -->
-<div id="line-container"></div>
+<!-- Yellow line effects -->
+<div id="yellowLineContainer" class="yellow-line-container"></div>
 
 <script>
   const overlay = document.getElementById('overlay');
   const message = document.getElementById('message');
   const background = document.getElementById('background');
-  const lineContainer = document.getElementById('line-container');
+  const yellowLineContainer = document.getElementById('yellowLineContainer');
 
   function hideMessage() {
     overlay.className = 'overlay';
@@ -178,25 +188,26 @@
     setTimeout(hideMessage, 5000);
   }
 
-  function showYellowLineWithText() {
-    lineContainer.innerHTML = ''; // clear old
-    const container = document.createElement('div');
-    container.className = 'yellow-line-container';
+  function showYellowLineAnimation() {
+    yellowLineContainer.innerHTML = ''; // Clear existing lines
 
-    const line = document.createElement('div');
-    line.className = 'yellow-line';
+    const leftLine = document.createElement('div');
+    leftLine.className = 'yellow-line left';
 
-    const text = document.createElement('div');
-    text.className = 'yellow-text';
-    text.textContent = '10 IN THE BIN';
+    const rightLine = document.createElement('div');
+    rightLine.className = 'yellow-line right';
 
-    container.appendChild(line);
-    container.appendChild(text);
-    lineContainer.appendChild(container);
+    const msg = document.createElement('div');
+    msg.className = 'yellow-line-message';
+    msg.textContent = 'YELLOW LINE INCOMING';
+
+    yellowLineContainer.appendChild(leftLine);
+    yellowLineContainer.appendChild(rightLine);
+    yellowLineContainer.appendChild(msg);
 
     setTimeout(() => {
-      lineContainer.innerHTML = ''; // remove after animation
-    }, 4000);
+      yellowLineContainer.innerHTML = '';
+    }, 5000); // remove after 5 secs
   }
 
   document.addEventListener('keydown', e => {
@@ -207,7 +218,7 @@
     if (key === 'c') showMessage('challenge', "CAPTAIN'S CHALLENGE");
     if (key === 'n') showMessage('notry', 'NO TRY');
     if (key === 'f') showMessage('fieldgoal', 'FIELD GOAL');
-    if (key === 'y') showYellowLineWithText();
+    if (key === 'y') showYellowLineAnimation();
   });
 
   window.onload = hideMessage;
