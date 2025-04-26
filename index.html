@@ -57,102 +57,109 @@
 
     .try .message {
       color: #ffcc00;
-      text-shadow: 0 0 20px #ffcc00, 0 0 50px #ffcc00;
     }
-
     .goal .message {
       color: #00ff00;
-      text-shadow: 0 0 20px #00ff00, 0 0 50px #00ff00;
     }
-
     .penalty .message {
       color: #ffffff;
-      text-shadow: 0 0 20px #ffffff, 0 0 50px #ffffff;
     }
-
     .challenge .message {
       color: #FFFF00;
-      text-shadow: 0 0 20px #ff6600, 0 0 50px #ff6600;
     }
-
     .notry .message {
       color: #ff0000;
-      text-shadow: 0 0 20px #ff0000, 0 0 50px #ff0000;
     }
-
     .fieldgoal .message {
       color: #00bfff;
-      text-shadow: 0 0 20px #00bfff, 0 0 50px #00bfff;
-    }
-
-    /* YELLOW LINE ANIMATION */
-    .yellow-line-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1000;
-      pointer-events: none;
-    }
-
-    .yellow-line {
-      position: absolute;
-      width: 10px;
-      height: 0;
-      background: yellow;
-      box-shadow: 0 0 20px yellow, 0 0 40px yellow;
-      animation: growLine 1s forwards;
-    }
-
-    .yellow-line.left {
-      left: 100px;
-      top: 0;
-    }
-
-    .yellow-line.right {
-      right: 100px;
-      top: 0;
-    }
-
-    .yellow-line-message {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 4em;
-      color: yellow;
-      text-shadow: 0 0 10px yellow, 0 0 30px yellow;
-      animation: fadeIn 1s forwards;
-      opacity: 0;
-    }
-
-    @keyframes growLine {
-      to {
-        height: 100%;
-      }
-    }
-
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
     }
 
     @keyframes appearSpin {
+      0% { transform: scale(0.5) rotate(0deg); opacity: 0; }
+      30% { transform: scale(1.2) rotate(360deg); opacity: 1; }
+      100% { transform: scale(1) rotate(720deg); opacity: 1; }
+    }
+
+    .yellow-line-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 5px;
+      background: yellow;
+      z-index: 1000;
+      overflow: hidden;
+      display: none;
+      transform: translate(-50%, -50%);
+      animation: expandYellow 7s forwards;
+    }
+
+    @keyframes expandYellow {
       0% {
-        transform: scale(0.5) rotate(0deg);
-        opacity: 0;
+        width: 0;
+        height: 5px;
       }
-      30% {
-        transform: scale(1.2) rotate(360deg);
-        opacity: 1;
+      50% {
+        width: 100vw;
+        height: 5px;
       }
       100% {
-        transform: scale(1) rotate(720deg);
-        opacity: 1;
+        width: 100vw;
+        height: 100vh;
       }
     }
+
+    .yellow-text {
+      position: absolute;
+      font-size: 0;
+      color: black;
+      opacity: 0;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1001;
+      pointer-events: none;
+      display: none;
+      text-align: center;
+    }
+
+    @keyframes revealText {
+      0% {
+        opacity: 0;
+        font-size: 2em;
+      }
+      100% {
+        opacity: 1;
+        font-size: 6em;
+      }
+    }
+
+    @keyframes closeYellow {
+      0% {
+        width: 100vw;
+        height: 100vh;
+      }
+      50% {
+        width: 100vw;
+        height: 5px;
+      }
+      100% {
+        width: 0;
+        height: 5px;
+      }
+    }
+
+    @keyframes fadeText {
+      0% {
+        opacity: 1;
+        font-size: 6em;
+      }
+      100% {
+        opacity: 0;
+        font-size: 0;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -165,14 +172,16 @@
   <div id="message" class="message">TEXT</div>
 </div>
 
-<!-- Yellow line effects -->
-<div id="yellowLineContainer" class="yellow-line-container"></div>
+<!-- Yellow Line Animation -->
+<div id="yellow-line-container" class="yellow-line-container"></div>
+<div id="yellow-text" class="yellow-text">YELLOW LINE INCOMING</div>
 
 <script>
   const overlay = document.getElementById('overlay');
   const message = document.getElementById('message');
   const background = document.getElementById('background');
-  const yellowLineContainer = document.getElementById('yellowLineContainer');
+  const yellowLineContainer = document.getElementById('yellow-line-container');
+  const yellowText = document.getElementById('yellow-text');
 
   function hideMessage() {
     overlay.className = 'overlay';
@@ -185,29 +194,42 @@
     message.textContent = text;
     overlay.classList.add('show', type);
     background.classList.add('show');
-    setTimeout(hideMessage, 5000);
+    setTimeout(hideMessage, 5000); // 5 seconds
   }
 
-  function showYellowLineAnimation() {
-    yellowLineContainer.innerHTML = ''; // Clear existing lines
+  function showYellowLineIncoming() {
+    yellowLineContainer.style.display = 'block';
+    yellowLineContainer.style.animation = 'expandYellow 7s forwards';
 
-    const leftLine = document.createElement('div');
-    leftLine.className = 'yellow-line left';
-
-    const rightLine = document.createElement('div');
-    rightLine.className = 'yellow-line right';
-
-    const msg = document.createElement('div');
-    msg.className = 'yellow-line-message';
-    msg.textContent = 'YELLOW LINE INCOMING';
-
-    yellowLineContainer.appendChild(leftLine);
-    yellowLineContainer.appendChild(rightLine);
-    yellowLineContainer.appendChild(msg);
-
+    // Start the second animation after 2 seconds, which shows the text after 1 second
     setTimeout(() => {
-      yellowLineContainer.innerHTML = '';
-    }, 5000); // remove after 5 secs
+      yellowText.style.display = 'block';
+      yellowText.style.animation = 'revealText 3s forwards';
+    }, 3000); // Start the text animation 1 second after the yellow line starts
+
+    // Countdown starts after the yellow line animation completes
+    setTimeout(() => {
+      let countdown = 5;
+      yellowText.textContent = countdown;
+
+      // Countdown loop
+      const interval = setInterval(() => {
+        countdown--;
+        yellowText.textContent = countdown;
+        if (countdown === 0) {
+          clearInterval(interval); // Stop the countdown
+          // Start closing animation after countdown finishes
+          setTimeout(() => {
+            yellowLineContainer.style.animation = 'closeYellow 2s forwards'; // Closing the yellow line
+            yellowText.style.animation = 'fadeText 2s forwards'; // Fade out text
+            setTimeout(() => {
+              yellowLineContainer.style.display = 'none';
+              yellowText.style.display = 'none';
+            }, 2000); // Hide the elements after closing animation
+          }, 1000); // 1-second delay after countdown
+        }
+      }, 1000); // Update every 1 second
+    }, 7000); // Start countdown after animation
   }
 
   document.addEventListener('keydown', e => {
@@ -218,7 +240,7 @@
     if (key === 'c') showMessage('challenge', "CAPTAIN'S CHALLENGE");
     if (key === 'n') showMessage('notry', 'NO TRY');
     if (key === 'f') showMessage('fieldgoal', 'FIELD GOAL');
-    if (key === 'y') showYellowLineAnimation();
+    if (key === 'y') showYellowLineIncoming(); // Trigger the yellow line animation
   });
 
   window.onload = hideMessage;
