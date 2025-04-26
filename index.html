@@ -81,6 +81,11 @@
       text-shadow: 0 0 20px #ff0000, 0 0 50px #ff0000;
     }
 
+    .fieldgoal .message {
+      color: #00bfff;
+      text-shadow: 0 0 20px #00bfff, 0 0 50px #00bfff;
+    }
+
     /* Yellow Line */
     .yellow-line {
       position: fixed;
@@ -164,7 +169,8 @@
     if (key === 'p') showMessage('penalty', 'PENALTY');
     if (key === 'c') showMessage('challenge', "CAPTAIN'S CHALLENGE");
     if (key === 'n') showMessage('notry', 'NO TRY');
-    if (key === 'y') showYellowLine(); // yellow line
+    if (key === 'f') showMessage('fieldgoal', 'FIELD GOAL');
+    if (key === 'y') showYellowLine();
   });
 
   window.onload = hideMessage;
