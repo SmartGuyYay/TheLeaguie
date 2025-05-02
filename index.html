@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Rugby Overlay Animation</title>
+  <title>Magic Round Rugby Overlay</title>
   <style>
     html, body {
       margin: 0;
@@ -10,6 +10,7 @@
       height: 100%;
       overflow: hidden;
       font-family: 'Arial Black', sans-serif;
+      background: black;
     }
 
     .background {
@@ -18,11 +19,19 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: black;
+      background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet);
+      background-size: 1400% 1400%;
+      animation: rainbowBackground 10s ease infinite;
       opacity: 0;
       z-index: 998;
       pointer-events: none;
       transition: opacity 0.5s ease;
+    }
+
+    @keyframes rainbowBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     .background.show {
@@ -35,21 +44,26 @@
       left: 50%;
       width: 0;
       height: 5px;
-      background: yellow;
+      background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+      background-size: 400% 100%;
+      animation: rainbowLine 2s linear infinite;
       z-index: 1000;
       overflow: hidden;
       display: none;
       transform: translate(-50%, -50%);
     }
 
-    /* SLOW for yellow line */
+    @keyframes rainbowLine {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
     @keyframes expandLineSlow {
       0% { width: 0; height: 5px; }
       50% { width: 100vw; height: 5px; }
       100% { width: 100vw; height: 100vh; }
     }
 
-    /* FAST for others */
     @keyframes expandLineFast {
       0% { width: 0; height: 5px; }
       50% { width: 100vw; height: 5px; }
@@ -65,7 +79,7 @@
     .event-text {
       position: absolute;
       font-size: 0;
-      color: black;
+      color: white;
       opacity: 0;
       top: 50%;
       left: 50%;
@@ -74,9 +88,12 @@
       pointer-events: none;
       display: none;
       text-align: center;
+      background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbowText 4s ease infinite;
     }
 
-    /* Text Animation */
     @keyframes revealText {
       0% { opacity: 0; font-size: 2em; }
       100% { opacity: 1; font-size: 6em; }
@@ -85,6 +102,12 @@
     @keyframes fadeText {
       0% { opacity: 1; font-size: 6em; }
       100% { opacity: 0; font-size: 0; }
+    }
+
+    @keyframes rainbowText {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
   </style>
 </head>
@@ -106,22 +129,19 @@
 
   function triggerEvent(color, text, withCountdown) {
     background.classList.add('show');
-
     lineContainer.style.display = 'block';
-    lineContainer.style.backgroundColor = color;
 
     if (withCountdown) {
-      lineContainer.style.animation = 'expandLineSlow 8s forwards';
+      lineContainer.style.animation = 'expandLineSlow 8s forwards, rainbowLine 2s infinite';
     } else {
-      lineContainer.style.animation = 'expandLineFast 3s forwards';
+      lineContainer.style.animation = 'expandLineFast 3s forwards, rainbowLine 2s infinite';
     }
 
     setTimeout(() => {
       eventText.style.display = 'block';
-      eventText.style.color = 'black';
       eventText.textContent = text;
-      eventText.style.animation = 'revealText 1.5s forwards';
-    }, withCountdown ? 3500 : 1200); // delay slightly longer now
+      eventText.style.animation = 'revealText 1.5s forwards, rainbowText 4s infinite';
+    }, withCountdown ? 3500 : 1200);
 
     if (withCountdown) {
       setTimeout(() => {
@@ -154,20 +174,20 @@
             eventText.style.display = 'none';
             background.classList.remove('show');
           }, 2500);
-        }, 1000); 
-      }, 5000); // slower total
+        }, 1000);
+      }, 5000);
     }
   }
 
   document.addEventListener('keydown', e => {
     const key = e.key.toLowerCase();
-    if (key === 't') triggerEvent('#ffcc00', 'TRY!', false);
-    if (key === 'g') triggerEvent('#00ff00', 'GOAL!', false);
-    if (key === 'p') triggerEvent('#ffffff', 'PENALTY!', false);
-    if (key === 'c') triggerEvent('#FFFF00', "CAPTAIN'S CHALLENGE", false);
-    if (key === 'n') triggerEvent('#ff0000', 'NO TRY!', false);
-    if (key === 'f') triggerEvent('#00bfff', 'FIELD GOAL!', false);
-    if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING', true); 
+    if (key === 't') triggerEvent('', 'TRY!', false);
+    if (key === 'g') triggerEvent('', 'GOAL!', false);
+    if (key === 'p') triggerEvent('', 'PENALTY!', false);
+    if (key === 'c') triggerEvent('', "CAPTAIN'S CHALLENGE", false);
+    if (key === 'n') triggerEvent('', 'NO TRY!', false);
+    if (key === 'f') triggerEvent('', 'FIELD GOAL!', false);
+    if (key === 'y') triggerEvent('', 'MAGIC ROUND RAINBOW!!!', true);
   });
 
   window.onload = () => {
