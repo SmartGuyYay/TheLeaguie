@@ -57,12 +57,6 @@
       100% { background-position: 100% 50%; }
     }
 
-    @keyframes expandLineSlow {
-      0% { width: 0; height: 5px; }
-      50% { width: 100vw; height: 5px; }
-      100% { width: 100vw; height: 100vh; }
-    }
-
     @keyframes expandLineFast {
       0% { width: 0; height: 5px; }
       50% { width: 100vw; height: 5px; }
@@ -77,7 +71,7 @@
 
     .event-text {
       position: absolute;
-      font-size: 0;
+      font-size: 6em;
       color: white;
       opacity: 0;
       top: 50%;
@@ -94,8 +88,8 @@
     }
 
     @keyframes revealText {
-      0% { opacity: 0; font-size: 2em; }
-      100% { opacity: 1; font-size: 6em; }
+      0% { opacity: 0; font-size: 2em; transform: translate(-50%, -50%) scale(0.5); }
+      100% { opacity: 1; font-size: 6em; transform: translate(-50%, -50%) scale(1); }
     }
 
     @keyframes fadeText {
@@ -107,6 +101,31 @@
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
+    }
+
+    .yellow-event-text {
+      font-size: 3em;
+      background: linear-gradient(45deg, yellow, gold);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: yellowText 4s ease infinite;
+    }
+
+    @keyframes yellowText {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Additional animations for new events */
+    @keyframes labourScore {
+      0% { font-size: 1em; opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+      100% { font-size: 4em; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .labour-event-text {
+      color: #e2001a; /* Labour red */
+      animation: labourScore 3s ease forwards;
     }
   </style>
 </head>
@@ -126,67 +145,56 @@
   const lineContainer = document.getElementById('line-container');
   const eventText = document.getElementById('event-text');
 
-  function triggerEvent(color, text, withCountdown) {
+  function triggerEvent(color, text, yellow = false) {
     background.classList.add('show');
     lineContainer.style.display = 'block';
 
-    if (withCountdown) {
-      lineContainer.style.animation = 'expandLineSlow 8s forwards, rainbowLine 2s infinite';
-    } else {
-      lineContainer.style.animation = 'expandLineFast 3s forwards, rainbowLine 2s infinite';
-    }
+    lineContainer.style.animation = 'expandLineFast 3s forwards, rainbowLine 2s infinite';
 
     setTimeout(() => {
       eventText.style.display = 'block';
       eventText.textContent = text;
-      eventText.style.animation = 'revealText 1.5s forwards, rainbowText 4s infinite';
-    }, withCountdown ? 3500 : 1200);
 
-    if (withCountdown) {
+      // Apply different styles based on the event type
+      if (yellow) {
+        eventText.classList.add('yellow-event-text'); // Use smaller size for yellow event
+        eventText.style.animation = 'revealText 2s forwards, yellowText 4s infinite';
+      } else if (text.includes('Labour')) {
+        eventText.classList.add('labour-event-text');
+        eventText.style.animation = 'labourScore 3s ease forwards';
+      } else {
+        eventText.classList.remove('yellow-event-text');
+        eventText.style.animation = 'revealText 2s forwards, rainbowText 4s infinite';
+      }
+    }, 1200);
+
+    setTimeout(() => {
       setTimeout(() => {
-        let countdown = 5;
-        eventText.textContent = countdown;
-        const interval = setInterval(() => {
-          countdown--;
-          eventText.textContent = countdown;
-          if (countdown === 0) {
-            clearInterval(interval);
-            setTimeout(() => {
-              lineContainer.style.animation = 'closeLine 2.5s forwards';
-              eventText.style.animation = 'fadeText 2.5s forwards';
-              setTimeout(() => {
-                lineContainer.style.display = 'none';
-                eventText.style.display = 'none';
-                background.classList.remove('show');
-              }, 2500);
-            }, 1000);
-          }
-        }, 1000);
-      }, 8500);
-    } else {
-      setTimeout(() => {
+        lineContainer.style.animation = 'closeLine 2.5s forwards';
+        eventText.style.animation = 'fadeText 2.5s forwards';
         setTimeout(() => {
-          lineContainer.style.animation = 'closeLine 2.5s forwards';
-          eventText.style.animation = 'fadeText 2.5s forwards';
-          setTimeout(() => {
-            lineContainer.style.display = 'none';
-            eventText.style.display = 'none';
-            background.classList.remove('show');
-          }, 2500);
-        }, 1000);
-      }, 5000);
-    }
+          lineContainer.style.display = 'none';
+          eventText.style.display = 'none';
+          background.classList.remove('show');
+        }, 2500);
+      }, 1000);
+    }, 5000);
   }
 
   document.addEventListener('keydown', e => {
     const key = e.key.toLowerCase();
-    if (key === 't') triggerEvent('', 'TRY!', false);
-    if (key === 'g') triggerEvent('', 'GOAL!', false);
-    if (key === 'p') triggerEvent('', 'PENALTY!', false);
-    if (key === 'c') triggerEvent('', "CAPTAIN'S CHALLENGE", false);
-    if (key === 'n') triggerEvent('', 'NO TRY!', false);
-    if (key === 'f') triggerEvent('', 'FIELD GOAL!', false);
     if (key === 'y') triggerEvent('', 'YELLOW LINE INCOMING', true);
+    if (key === 't') triggerEvent('', 'TRY!');
+    if (key === 'g') triggerEvent('', 'GOAL!');
+    if (key === 'p') triggerEvent('', 'PENALTY!');
+    if (key === 'c') triggerEvent('', "CAPTAIN'S CHALLENGE");
+    if (key === 'n') triggerEvent('', 'NO TRY!');
+    if (key === 'f') triggerEvent('', 'FIELD GOAL!');
+    if (key === 'l') triggerEvent('', 'Labour Scores a Seat!');
+    if (key === 'p') triggerEvent('', 'LNP Scores a Seat!');	
+    if (key === 'g') triggerEvent('', 'Greens Score a Seat!');
+	if (key === 'i') triggerEvent('', 'Another Party Score a Seat!');	
+	
   });
 
   window.onload = () => {
