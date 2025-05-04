@@ -103,8 +103,9 @@
       100% { background-position: 0% 50%; }
     }
 
-    .yellow-event-text {
-      font-size: 3em;
+    /* Updated to 24px text for B BUTTON EVENT */
+    .small-event-text {
+      font-size: 44px !important; /* Now it's 24px */
       background: linear-gradient(45deg, yellow, gold);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -117,27 +118,21 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Additional animations for new events */
+    .labour-event-text {
+      color: #e2001a;
+      animation: labourScore 3s ease forwards;
+    }
+
     @keyframes labourScore {
       0% { font-size: 1em; opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
       100% { font-size: 4em; opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    }
-
-    .labour-event-text {
-      color: #e2001a; /* Labour red */
-      animation: labourScore 3s ease forwards;
     }
   </style>
 </head>
 <body>
 
-<!-- Background -->
 <div id="background" class="background"></div>
-
-<!-- Animated Line -->
 <div id="line-container" class="line-container"></div>
-
-<!-- Text -->
 <div id="event-text" class="event-text"></div>
 
 <script>
@@ -145,25 +140,23 @@
   const lineContainer = document.getElementById('line-container');
   const eventText = document.getElementById('event-text');
 
-  function triggerEvent(color, text, yellow = false) {
+  function triggerEvent(color, text, isSmall = false) {
     background.classList.add('show');
     lineContainer.style.display = 'block';
-
     lineContainer.style.animation = 'expandLineFast 3s forwards, rainbowLine 2s infinite';
 
     setTimeout(() => {
       eventText.style.display = 'block';
       eventText.textContent = text;
+      eventText.className = 'event-text'; // Reset
 
-      // Apply different styles based on the event type
-      if (yellow) {
-        eventText.classList.add('yellow-event-text'); // Use smaller size for yellow event
+      if (isSmall) {
+        eventText.classList.add('small-event-text'); // Apply 24px text size
         eventText.style.animation = 'revealText 2s forwards, yellowText 4s infinite';
       } else if (text.includes('Labour')) {
         eventText.classList.add('labour-event-text');
         eventText.style.animation = 'labourScore 3s ease forwards';
       } else {
-        eventText.classList.remove('yellow-event-text');
         eventText.style.animation = 'revealText 2s forwards, rainbowText 4s infinite';
       }
     }, 1200);
@@ -190,20 +183,18 @@
     if (key === 'c') triggerEvent('', "CAPTAIN'S CHALLENGE");
     if (key === 'n') triggerEvent('', 'NO TRY!');
     if (key === 'f') triggerEvent('', 'FIELD GOAL!');
-    if (key === 'd') triggerEvent('', 'DROPOUT!');
-    if (key === 'b') triggerEvent('', 'BRONX ARE BETTER THAN ROOSTAS!');	  
     if (key === 'a') triggerEvent('', 'Labor Scores a Seat!');
-    if (key === 'v') triggerEvent('', 'LNP Scores a Seat!');	
+    if (key === 'd') triggerEvent('', 'LNP Scores a Seat!');
     if (key === 'r') triggerEvent('', 'Greens Score a Seat!');
-	if (key === 'i') triggerEvent('', 'Another Party Score a Seat!');	
-	
+    if (key === 'i') triggerEvent('', 'Another Party Score a Seat!');
+    if (key === 'b') triggerEvent('', 'THE BRONX ARE BETTER THAN THE ROOSTAS', true); // Text size 24px
   });
 
   window.onload = () => {
     background.classList.remove('show');
     lineContainer.style.display = 'none';
     eventText.style.display = 'none';
-  }
+  };
 </script>
 
 </body>
