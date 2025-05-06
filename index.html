@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Magic Round Rugby Overlay</title>
+  <title>Rugby Overlay Animation</title>
   <style>
     html, body {
       margin: 0;
@@ -18,19 +18,11 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet);
-      background-size: 1400% 1400%;
-      animation: rainbowBackground 10s ease infinite;
+      background: black;
       opacity: 0;
       z-index: 998;
       pointer-events: none;
       transition: opacity 0.5s ease;
-    }
-
-    @keyframes rainbowBackground {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
     }
 
     .background.show {
@@ -43,20 +35,21 @@
       left: 50%;
       width: 0;
       height: 5px;
-      background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
-      background-size: 400% 100%;
-      animation: rainbowLine 2s linear infinite;
+      background: yellow;
       z-index: 1000;
       overflow: hidden;
       display: none;
       transform: translate(-50%, -50%);
     }
 
-    @keyframes rainbowLine {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 100% 50%; }
+    /* SLOW for yellow line */
+    @keyframes expandLineSlow {
+      0% { width: 0; height: 5px; }
+      50% { width: 100vw; height: 5px; }
+      100% { width: 100vw; height: 100vh; }
     }
 
+    /* FAST for others */
     @keyframes expandLineFast {
       0% { width: 0; height: 5px; }
       50% { width: 100vw; height: 5px; }
@@ -71,8 +64,8 @@
 
     .event-text {
       position: absolute;
-      font-size: 6em;
-      color: white;
+      font-size: 0;
+      color: black;
       opacity: 0;
       top: 50%;
       left: 50%;
@@ -81,141 +74,107 @@
       pointer-events: none;
       display: none;
       text-align: center;
-      background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: rainbowText 4s ease infinite;
     }
 
+    /* Text Animation */
     @keyframes revealText {
-      0% { opacity: 0; font-size: 2em; transform: translate(-50%, -50%) scale(0.5); }
-      100% { opacity: 1; font-size: 6em; transform: translate(-50%, -50%) scale(1); }
+      0% { opacity: 0; font-size: 2em; }
+      100% { opacity: 1; font-size: 6em; }
     }
 
     @keyframes fadeText {
       0% { opacity: 1; font-size: 6em; }
       100% { opacity: 0; font-size: 0; }
     }
-
-    @keyframes rainbowText {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .small-event-text {
-      font-size: 44px !important;
-      background: linear-gradient(45deg, yellow, gold);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: yellowText 4s ease infinite;
-    }
-
-    @keyframes yellowText {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .labour-event-text {
-      color: #e2001a;
-      animation: labourScore 3s ease forwards;
-    }
-
-    @keyframes labourScore {
-      0% { font-size: 1em; opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-      100% { font-size: 4em; opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    }
-    
-    /* Golden Point text styling */
-    .golden-point-text {
-      font-size: 5em;
-      color: gold;
-      position: absolute;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1002;
-      display: none;
-    }
-
   </style>
 </head>
 <body>
 
+<!-- Background -->
 <div id="background" class="background"></div>
+
+<!-- Animated Line -->
 <div id="line-container" class="line-container"></div>
+
+<!-- Text -->
 <div id="event-text" class="event-text"></div>
-<div id="golden-point" class="golden-point-text">Golden Point!</div>
 
 <script>
   const background = document.getElementById('background');
   const lineContainer = document.getElementById('line-container');
   const eventText = document.getElementById('event-text');
-  const goldenPointText = document.getElementById('golden-point');
 
-  function triggerEvent(color, text, isSmall = false) {
+  function triggerEvent(color, text, withCountdown) {
     background.classList.add('show');
+
     lineContainer.style.display = 'block';
-    lineContainer.style.animation = 'expandLineFast 3s forwards, rainbowLine 2s infinite';
+    lineContainer.style.backgroundColor = color;
+
+    if (withCountdown) {
+      lineContainer.style.animation = 'expandLineSlow 8s forwards';
+    } else {
+      lineContainer.style.animation = 'expandLineFast 3s forwards';
+    }
 
     setTimeout(() => {
       eventText.style.display = 'block';
+      eventText.style.color = 'black';
       eventText.textContent = text;
-      eventText.className = 'event-text'; // Reset
+      eventText.style.animation = 'revealText 1.5s forwards';
+    }, withCountdown ? 3500 : 1200); // delay slightly longer now
 
-      if (isSmall) {
-        eventText.classList.add('small-event-text'); // Apply 24px text size
-        eventText.style.animation = 'revealText 2s forwards, yellowText 4s infinite';
-      } else if (text.includes('Labour')) {
-        eventText.classList.add('labour-event-text');
-        eventText.style.animation = 'labourScore 3s ease forwards';
-      } else {
-        eventText.style.animation = 'revealText 2s forwards, rainbowText 4s infinite';
-      }
-    }, 1200);
-
-    setTimeout(() => {
+    if (withCountdown) {
       setTimeout(() => {
-        lineContainer.style.animation = 'closeLine 2.5s forwards';
-        eventText.style.animation = 'fadeText 2.5s forwards';
+        let countdown = 5;
+        eventText.textContent = countdown;
+        const interval = setInterval(() => {
+          countdown--;
+          eventText.textContent = countdown;
+          if (countdown === 0) {
+            clearInterval(interval);
+            setTimeout(() => {
+              lineContainer.style.animation = 'closeLine 2.5s forwards';
+              eventText.style.animation = 'fadeText 2.5s forwards';
+              setTimeout(() => {
+                lineContainer.style.display = 'none';
+                eventText.style.display = 'none';
+                background.classList.remove('show');
+              }, 2500);
+            }, 1000);
+          }
+        }, 1000);
+      }, 8500);
+    } else {
+      setTimeout(() => {
         setTimeout(() => {
-          lineContainer.style.display = 'none';
-          eventText.style.display = 'none';
-          background.classList.remove('show');
-        }, 2500);
-      }, 1000);
-    }, 5000);
+          lineContainer.style.animation = 'closeLine 2.5s forwards';
+          eventText.style.animation = 'fadeText 2.5s forwards';
+          setTimeout(() => {
+            lineContainer.style.display = 'none';
+            eventText.style.display = 'none';
+            background.classList.remove('show');
+          }, 2500);
+        }, 1000); 
+      }, 5000); // slower total
+    }
   }
 
   document.addEventListener('keydown', e => {
     const key = e.key.toLowerCase();
-    if (key === 'y') triggerEvent('', 'YELLOW LINE INCOMING', true);
-    if (key === 't') triggerEvent('', 'TRY!');
-    if (key === 'g') triggerEvent('', 'GOAL!');
-    if (key === 'p') triggerEvent('', 'PENALTY!');
-    if (key === 'c') triggerEvent('', "CAPTAIN'S CHALLENGE");
-    if (key === 'n') triggerEvent('', 'NO TRY!');
-    if (key === 'f') triggerEvent('', 'FIELD GOAL!');
-    if (key === 'i') triggerEvent('', 'NO FIELD GOAL!');
-    if (key === 'o') {
-      goldenPointText.style.display = 'block';
-      setTimeout(() => {
-        goldenPointText.style.display = 'none';
-      }, 600000);  // Hide the Golden Point text after 10 minutes (600000 ms)
-    }
-    if (key === 'a') triggerEvent('', 'Labor Scores a Seat!');
-    if (key === 'd') triggerEvent('', 'LNP Scores a Seat!');
-    if (key === 'r') triggerEvent('', 'Greens Score a Seat!');
-    if (key === 'Z') triggerEvent('', 'Another Party Score a Seat!');
-    if (key === 'b') triggerEvent('', 'THE BRONX ARE BETTER THAN THE ROOSTAS', true); // Text size 24px
+    if (key === 't') triggerEvent('#ffcc00', 'TRY!', false);
+    if (key === 'g') triggerEvent('#00ff00', 'GOAL!', false);
+    if (key === 'p') triggerEvent('#ffffff', 'PENALTY!', false);
+    if (key === 'c') triggerEvent('#FFFF00', "CAPTAIN'S CHALLENGE", false);
+    if (key === 'n') triggerEvent('#ff0000', 'NO TRY!', false);
+    if (key === 'f') triggerEvent('#00bfff', 'FIELD GOAL!', false);
+    if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING', true); 
   });
 
   window.onload = () => {
     background.classList.remove('show');
     lineContainer.style.display = 'none';
     eventText.style.display = 'none';
-  };
+  }
 </script>
 
 </body>
