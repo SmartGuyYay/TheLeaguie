@@ -42,14 +42,12 @@
       transform: translate(-50%, -50%);
     }
 
-    /* SLOW for yellow line */
     @keyframes expandLineSlow {
       0% { width: 0; height: 5px; }
       50% { width: 100vw; height: 5px; }
       100% { width: 100vw; height: 100vh; }
     }
 
-    /* FAST for others */
     @keyframes expandLineFast {
       0% { width: 0; height: 5px; }
       50% { width: 100vw; height: 5px; }
@@ -76,7 +74,6 @@
       text-align: center;
     }
 
-    /* Text Animation */
     @keyframes revealText {
       0% { opacity: 0; font-size: 2em; }
       100% { opacity: 1; font-size: 6em; }
@@ -86,17 +83,19 @@
       0% { opacity: 1; font-size: 6em; }
       100% { opacity: 0; font-size: 0; }
     }
+
+    /* Smaller text style for Cosmic line */
+    .small-text {
+      font-size: 2em !important;
+      animation: none !important;
+      opacity: 1 !important;
+    }
   </style>
 </head>
 <body>
 
-<!-- Background -->
 <div id="background" class="background"></div>
-
-<!-- Animated Line -->
 <div id="line-container" class="line-container"></div>
-
-<!-- Text -->
 <div id="event-text" class="event-text"></div>
 
 <script>
@@ -120,8 +119,14 @@
       eventText.style.display = 'block';
       eventText.style.color = 'black';
       eventText.textContent = text;
-      eventText.style.animation = 'revealText 1.5s forwards';
-    }, withCountdown ? 3500 : 1200); // delay slightly longer now
+
+      if (text.includes('Cosmic is daddy')) {
+        eventText.classList.add('small-text');
+      } else {
+        eventText.classList.remove('small-text');
+        eventText.style.animation = 'revealText 1.5s forwards';
+      }
+    }, withCountdown ? 3500 : 1200);
 
     if (withCountdown) {
       setTimeout(() => {
@@ -148,37 +153,12 @@
       setTimeout(() => {
         setTimeout(() => {
           lineContainer.style.animation = 'closeLine 2.5s forwards';
-          eventText.style.animation = 'fadeText 2.5s forwards';
+          if (!eventText.classList.contains('small-text')) {
+            eventText.style.animation = 'fadeText 2.5s forwards';
+          }
           setTimeout(() => {
             lineContainer.style.display = 'none';
             eventText.style.display = 'none';
             background.classList.remove('show');
           }, 2500);
-        }, 1000); 
-      }, 5000); // slower total
-    }
-  }
-
-  document.addEventListener('keydown', e => {
-    const key = e.key.toLowerCase();
-    if (key === 't') triggerEvent('#ffcc00', 'TRY!', false);
-    if (key === 'g') triggerEvent('#00ff00', 'GOAL!', false);
-    if (key === 'p') triggerEvent('#ffffff', 'PENALTY!', false);
-    if (key === 'c') triggerEvent('#FFFF00', "CAPTAIN'S CHALLENGE", false);
-    if (key === 'n') triggerEvent('#ff0000', 'NO TRY!', false);
-    if (key === 'f') triggerEvent('#00bfff', 'FIELD GOAL!', false);
-    if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING', true); 
-    if (key === 'd') triggerEvent('orange', 'DROPOUT!', false); 
-    if (key === '6') triggerEvent('purple', '6 AGAIN!', false);
-    if (key === ' ') triggerEvent('purple', 'Cosmic is daddy no diddy (I am sorry Leaguie)', false);
-  });
-
-  window.onload = () => {
-    background.classList.remove('show');
-    lineContainer.style.display = 'none';
-    eventText.style.display = 'none';
-  }
-</script>
-
-</body>
-</html>
+        }, 100
