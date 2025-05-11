@@ -161,4 +161,31 @@
             eventText.style.display = 'none';
             background.classList.remove('show');
           }, 2500);
-        }, 100
+        }, 1000);
+      }, 5000);
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    const key = e.key.toLowerCase();
+    if (key === 't') triggerEvent('#ffcc00', 'TRY!', false);
+    if (key === 'g') triggerEvent('#00ff00', 'GOAL!', false);
+    if (key === 'p') triggerEvent('#ffffff', 'PENALTY!', false);
+    if (key === 'c') triggerEvent('#FFFF00', "CAPTAIN'S CHALLENGE", false);
+    if (key === 'n') triggerEvent('#ff0000', 'NO TRY!', false);
+    if (key === 'f') triggerEvent('#00bfff', 'FIELD GOAL!', false);
+    if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING', true); 
+    if (key === 'd') triggerEvent('orange', 'DROPOUT!', false); 
+    if (key === '6') triggerEvent('purple', '6 AGAIN!', false);
+    if (key === ' ') triggerEvent('purple', 'Cosmic is daddy no diddy (I am sorry Leaguie)', false);
+  });
+
+  window.onload = () => {
+    background.classList.remove('show');
+    lineContainer.style.display = 'none';
+    eventText.style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
