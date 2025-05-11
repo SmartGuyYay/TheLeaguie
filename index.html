@@ -31,7 +31,7 @@
 
     .line-container {
       position: fixed;
-      top: 50%;
+      top: 60%;
       left: 50%;
       width: 0;
       height: 5px;
@@ -42,13 +42,7 @@
       transform: translate(-50%, -50%);
     }
 
-    @keyframes expandLineSlow {
-      0% { width: 0; height: 5px; }
-      50% { width: 100vw; height: 5px; }
-      100% { width: 100vw; height: 100vh; }
-    }
-
-    @keyframes expandLineFast {
+    @keyframes expandLine {
       0% { width: 0; height: 5px; }
       50% { width: 100vw; height: 5px; }
       100% { width: 100vw; height: 100vh; }
@@ -65,7 +59,7 @@
       font-size: 0;
       color: black;
       opacity: 0;
-      top: 60%;
+      top: 70%;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 1001;
@@ -95,6 +89,11 @@
       animation: none !important;
       opacity: 1 !important;
     }
+
+    .score-text {
+      font-size: 4em !important;
+      animation: revealText 1.5s forwards !important;
+    }
   </style>
 </head>
 <body>
@@ -117,12 +116,7 @@
     background.classList.add('show');
     lineContainer.style.display = 'block';
     lineContainer.style.backgroundColor = color;
-
-    if (withCountdown) {
-      lineContainer.style.animation = 'expandLineSlow 8s forwards';
-    } else {
-      lineContainer.style.animation = 'expandLineFast 3s forwards';
-    }
+    lineContainer.style.animation = 'expandLine 3s forwards';
 
     setTimeout(() => {
       eventText.style.display = 'block';
@@ -130,53 +124,33 @@
       eventText.textContent = text;
 
       // Remove previous size classes
-      eventText.classList.remove('small-text', 'medium-small-text');
+      eventText.classList.remove('small-text', 'medium-small-text', 'score-text');
+      eventText.style.animation = '';
 
-      // Set font size depending on content
+      // Apply font size class
       if (text === "Cosmic is daddy no diddy (I am sorry Leaguie)") {
         eventText.classList.add('small-text');
       } else if (text === "CAPTAIN'S CHALLENGE") {
         eventText.classList.add('medium-small-text');
+      } else if (text.includes("14-0")) {
+        eventText.classList.add('score-text');
       } else {
         eventText.style.animation = 'revealText 1.5s forwards';
       }
+    }, 1200);
 
-    }, withCountdown ? 3500 : 1200);
-
-    if (withCountdown) {
+    // Close animation
+    setTimeout(() => {
       setTimeout(() => {
-        let countdown = 5;
-        eventText.textContent = countdown;
-        const interval = setInterval(() => {
-          countdown--;
-          eventText.textContent = countdown;
-          if (countdown === 0) {
-            clearInterval(interval);
-            setTimeout(() => {
-              lineContainer.style.animation = 'closeLine 2.5s forwards';
-              eventText.style.animation = 'fadeText 2.5s forwards';
-              setTimeout(() => {
-                lineContainer.style.display = 'none';
-                eventText.style.display = 'none';
-                background.classList.remove('show');
-              }, 2500);
-            }, 1000);
-          }
-        }, 1000);
-      }, 8500);
-    } else {
-      setTimeout(() => {
+        lineContainer.style.animation = 'closeLine 2.5s forwards';
+        eventText.style.animation = 'fadeText 2.5s forwards';
         setTimeout(() => {
-          lineContainer.style.animation = 'closeLine 2.5s forwards';
-          eventText.style.animation = 'fadeText 2.5s forwards';
-          setTimeout(() => {
-            lineContainer.style.display = 'none';
-            eventText.style.display = 'none';
-            background.classList.remove('show');
-          }, 2500);
-        }, 1000);
-      }, 5000);
-    }
+          lineContainer.style.display = 'none';
+          eventText.style.display = 'none';
+          background.classList.remove('show');
+        }, 2500);
+      }, 1000);
+    }, 5000);
   }
 
   document.addEventListener('keydown', e => {
@@ -187,11 +161,11 @@
     if (key === 'c') triggerEvent('#FFFF00', "CAPTAIN'S CHALLENGE", false);
     if (key === 'n') triggerEvent('#ff0000', 'NO TRY!', false);
     if (key === 'f') triggerEvent('#00bfff', 'FIELD GOAL!', false);
-    if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING', true); 
-    if (key === 'd') triggerEvent('orange', 'DROPOUT!', false); 
+    if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING', true);
+    if (key === 'd') triggerEvent('orange', 'DROPOUT!', false);
     if (key === '6') triggerEvent('purple', '6 AGAIN!', false);
-    if (key === '1') triggerEvent('red', '14-0 CURSE!', false);
     if (key === ' ') triggerEvent('purple', 'Cosmic is daddy no diddy (I am sorry Leaguie)', false);
+    if (key === '4') triggerEvent('red', '14-0 curse is not real', false);
   });
 
   window.onload = () => {
