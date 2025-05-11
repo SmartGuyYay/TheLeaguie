@@ -84,9 +84,16 @@
       100% { opacity: 0; font-size: 0; }
     }
 
-    /* Smaller text style for Cosmic line */
+    /* Smallest text (for Cosmic line) */
     .small-text {
       font-size: 2em !important;
+      animation: none !important;
+      opacity: 1 !important;
+    }
+
+    /* Medium-small text (for Captain's Challenge) */
+    .medium-small-text {
+      font-size: 4em !important;
       animation: none !important;
       opacity: 1 !important;
     }
@@ -120,10 +127,15 @@
       eventText.style.color = 'black';
       eventText.textContent = text;
 
+      // Remove previous size classes
+      eventText.classList.remove('small-text', 'medium-small-text');
+
+      // Apply correct size class
       if (text.includes('Cosmic is daddy')) {
         eventText.classList.add('small-text');
+      } else if (text.includes("CAPTAIN'S CHALLENGE")) {
+        eventText.classList.add('medium-small-text');
       } else {
-        eventText.classList.remove('small-text');
         eventText.style.animation = 'revealText 1.5s forwards';
       }
     }, withCountdown ? 3500 : 1200);
@@ -153,7 +165,7 @@
       setTimeout(() => {
         setTimeout(() => {
           lineContainer.style.animation = 'closeLine 2.5s forwards';
-          if (!eventText.classList.contains('small-text')) {
+          if (!eventText.classList.contains('small-text') && !eventText.classList.contains('medium-small-text')) {
             eventText.style.animation = 'fadeText 2.5s forwards';
           }
           setTimeout(() => {
