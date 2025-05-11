@@ -65,7 +65,7 @@
       font-size: 0;
       color: black;
       opacity: 0;
-      top: 50%;
+      top: 60%;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 1001;
@@ -84,14 +84,12 @@
       100% { opacity: 0; font-size: 0; }
     }
 
-    /* Smallest text (for Cosmic line) */
     .small-text {
-      font-size: 2em !important;
+      font-size: 1.5em !important;
       animation: none !important;
       opacity: 1 !important;
     }
 
-    /* Medium-small text (for Captain's Challenge) */
     .medium-small-text {
       font-size: 3em !important;
       animation: none !important;
@@ -101,8 +99,13 @@
 </head>
 <body>
 
+<!-- Background -->
 <div id="background" class="background"></div>
+
+<!-- Line -->
 <div id="line-container" class="line-container"></div>
+
+<!-- Text -->
 <div id="event-text" class="event-text"></div>
 
 <script>
@@ -112,7 +115,6 @@
 
   function triggerEvent(color, text, withCountdown) {
     background.classList.add('show');
-
     lineContainer.style.display = 'block';
     lineContainer.style.backgroundColor = color;
 
@@ -130,14 +132,15 @@
       // Remove previous size classes
       eventText.classList.remove('small-text', 'medium-small-text');
 
-      // Apply correct size class
-      if (text.includes('Cosmic is daddy')) {
+      // Set font size depending on content
+      if (text === "Cosmic is daddy no diddy (I am sorry Leaguie)") {
         eventText.classList.add('small-text');
-      } else if (text.includes("CAPTAIN'S CHALLENGE")) {
+      } else if (text === "CAPTAIN'S CHALLENGE") {
         eventText.classList.add('medium-small-text');
       } else {
         eventText.style.animation = 'revealText 1.5s forwards';
       }
+
     }, withCountdown ? 3500 : 1200);
 
     if (withCountdown) {
@@ -165,9 +168,7 @@
       setTimeout(() => {
         setTimeout(() => {
           lineContainer.style.animation = 'closeLine 2.5s forwards';
-          if (!eventText.classList.contains('small-text') && !eventText.classList.contains('medium-small-text')) {
-            eventText.style.animation = 'fadeText 2.5s forwards';
-          }
+          eventText.style.animation = 'fadeText 2.5s forwards';
           setTimeout(() => {
             lineContainer.style.display = 'none';
             eventText.style.display = 'none';
@@ -196,7 +197,7 @@
     background.classList.remove('show');
     lineContainer.style.display = 'none';
     eventText.style.display = 'none';
-  }
+  };
 </script>
 
 </body>
