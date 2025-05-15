@@ -1,177 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Rugby Overlay Animation</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
-      font-family: 'Arial Black', sans-serif;
-    }
-
-    .background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: black;
-      opacity: 0;
-      z-index: 998;
-      pointer-events: none;
-      transition: opacity 0.5s ease;
-    }
-
-    .background.show {
-      opacity: 1;
-    }
-
-    .line-container {
-      position: fixed;
-      top: 60%;
-      left: 50%;
-      width: 0;
-      height: 5px;
-      background: yellow;
-      z-index: 1000;
-      overflow: hidden;
-      display: none;
-      transform: translate(-50%, -50%);
-    }
-
-    @keyframes expandLine {
-      0% { width: 0; height: 5px; }
-      50% { width: 100vw; height: 5px; }
-      100% { width: 100vw; height: 100vh; }
-    }
-
-    @keyframes closeLine {
-      0% { width: 100vw; height: 100vh; }
-      50% { width: 100vw; height: 5px; }
-      100% { width: 0; height: 5px; }
-    }
-
-    .event-text {
-      position: absolute;
-      font-size: 0;
-      color: black;
-      opacity: 0;
-      top: 70%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 1001;
-      pointer-events: none;
-      display: none;
-      text-align: center;
-    }
-
-    @keyframes revealText {
-      0% { opacity: 0; font-size: 2em; }
-      100% { opacity: 1; font-size: 6em; }
-    }
-
-    @keyframes fadeText {
-      0% { opacity: 1; font-size: 6em; }
-      100% { opacity: 0; font-size: 0; }
-    }
-
-    .small-text {
-      font-size: 1.5em !important;
-      animation: none !important;
-      opacity: 1 !important;
-    }
-
-    .medium-small-text {
-      font-size: 3em !important;
-      animation: none !important;
-      opacity: 1 !important;
-    }
-
-    .score-text {
-      font-size: 2.5em !important;
-      animation: revealText 1.5s forwards !important;
-    }
-  </style>
+<meta charset="UTF-8" />
+<title>Rugby Overlay Animation</title>
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%; overflow: hidden;
+    font-family: 'Arial Black', sans-serif;
+    background: black;
+  }
+  .background {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: black;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 998;
+    transition: opacity 0.5s ease;
+  }
+  .background.show {
+    opacity: 1;
+  }
+  .line-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 5px;
+    z-index: 1000;
+    overflow: hidden;
+    display: none;
+    transform: translate(-50%, -50%);
+  }
+  @keyframes expandLine {
+    0% { width: 0; height: 5px; }
+    50% { width: 100vw; height: 5px; }
+    100% { width: 100vw; height: 100vh; }
+  }
+  @keyframes closeLine {
+    0% { width: 100vw; height: 100vh; }
+    50% { width: 100vw; height: 5px; }
+    100% { width: 0; height: 5px; }
+  }
+  .event-wrapper {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    justify-content: center;
+    z-index: 1001;
+    pointer-events: none;
+    align-items: center;
+    top: 0;
+    left: 0;
+  }
+  .event-text {
+    color: white;
+    font-size: 0;
+    opacity: 0;
+    font-weight: 900;
+    text-align: center;
+    animation-fill-mode: forwards;
+    position: relative;
+    top: 0;
+    transform: translate(0, 0);
+    transition: font-size 0.3s ease, top 0.3s ease, opacity 0.3s ease;
+  }
+  .event-wrapper.lowered {
+    align-items: flex-start;
+    padding-top: 55vh;
+  }
+  .event-text.lowered-text {
+    font-size: 3em !important;
+  }
+  @keyframes revealText {
+    0% { opacity: 0; font-size: 2em; }
+    100% { opacity: 1; font-size: 6em; }
+  }
+  @keyframes fadeText {
+    0% { opacity: 1; font-size: 6em; }
+    100% { opacity: 0; font-size: 0; }
+  }
+</style>
 </head>
 <body>
 
-<!-- Background -->
 <div id="background" class="background"></div>
-
-<!-- Line -->
 <div id="line-container" class="line-container"></div>
-
-<!-- Text -->
-<div id="event-text" class="event-text"></div>
+<div id="event-wrapper" class="event-wrapper">
+  <div id="event-text" class="event-text"></div>
+</div>
 
 <script>
   const background = document.getElementById('background');
   const lineContainer = document.getElementById('line-container');
+  const eventWrapper = document.getElementById('event-wrapper');
   const eventText = document.getElementById('event-text');
 
-  function triggerEvent(color, text, withCountdown) {
+  function triggerEvent(type, text) {
     background.classList.add('show');
     lineContainer.style.display = 'block';
-    lineContainer.style.backgroundColor = color;
+    eventWrapper.style.display = 'flex';
+
+    // Set line color
+    if (text === "RED LINE INCOMING") {
+      lineContainer.style.background = '#ff0000';
+      eventText.style.color = 'white';
+    } else if (text === "YELLOW LINE INCOMING") {
+      lineContainer.style.background = 'yellow';
+      eventText.style.color = 'black';
+    } else if (type === 'gradient') {
+      lineContainer.style.background = 'linear-gradient(to right, maroon, blue)';
+      eventText.style.color = 'white';
+    } else {
+      lineContainer.style.background = type;
+      eventText.style.color = 'white';
+    }
+
+    // Start line expand animation
     lineContainer.style.animation = 'expandLine 3s forwards';
 
+    eventWrapper.classList.remove('lowered');
+    eventText.classList.remove('lowered-text');
+    eventText.style.animation = '';
+    eventText.style.opacity = 0;
+    eventText.style.fontSize = '0';
+    eventText.textContent = '';  // clear text to avoid showing early
+
+    // Reveal text AFTER line width hits 100vw (after 1.5s, half the animation)
     setTimeout(() => {
-      eventText.style.display = 'block';
-      eventText.style.color = 'black';
       eventText.textContent = text;
 
-      // Remove previous size classes
-      eventText.classList.remove('small-text', 'medium-small-text', 'score-text');
-      eventText.style.animation = '';
-
-      // Apply font size class
-      if (text === "Cosmic is daddy no diddy (I am sorry Leaguie)") {
-        eventText.classList.add('small-text');
-      } else if (text === "CAPTAIN'S CHALLENGE") {
-        eventText.classList.add('medium-small-text');
-      } else if (text.includes("14-0")) {
-        eventText.classList.add('score-text');
-      } else {
-        eventText.style.animation = 'revealText 1.5s forwards';
+      if (text === "CAPTAIN'S CHALLENGE" || text === "YELLOW LINE INCOMING" || text === "RED LINE INCOMING") {
+        eventWrapper.classList.add('lowered');
+        eventText.classList.add('lowered-text');
       }
-    }, 1200);
 
-    // Close animation
-    setTimeout(() => {
+      // Animate reveal text fade-in and scale
+      eventText.style.animation = 'revealText 1s forwards';
+    }, 1600);
+
+    if (text === "YELLOW LINE INCOMING" || text === "RED LINE INCOMING") {
       setTimeout(() => {
-        lineContainer.style.animation = 'closeLine 2.5s forwards';
-        eventText.style.animation = 'fadeText 2.5s forwards';
+        let countdown = 5;
+        eventText.style.fontSize = '6em';
+        eventText.style.opacity = 1;
+
+        const countdownInterval = setInterval(() => {
+          eventText.textContent = countdown;
+          countdown--;
+          if (countdown < 0) {
+            clearInterval(countdownInterval);
+
+            setTimeout(() => {
+              eventText.style.animation = 'fadeText 0.5s forwards';
+              lineContainer.style.animation = 'closeLine 2.5s forwards';
+            }, 500);
+
+            setTimeout(() => {
+              lineContainer.style.display = 'none';
+              eventWrapper.style.display = 'none';
+              background.classList.remove('show');
+              eventWrapper.classList.remove('lowered');
+              eventText.className = 'event-text';
+            }, 3000);
+          }
+        }, 1000);
+      }, 3200);
+    } else {
+      // For other events, close line + fade text after 5s total
+      setTimeout(() => {
         setTimeout(() => {
-          lineContainer.style.display = 'none';
-          eventText.style.display = 'none';
-          background.classList.remove('show');
-        }, 2500);
-      }, 1000);
-    }, 5000);
+          lineContainer.style.animation = 'closeLine 2.5s forwards';
+          eventText.style.animation = 'fadeText 2.5s forwards';
+          setTimeout(() => {
+            lineContainer.style.display = 'none';
+            eventWrapper.style.display = 'none';
+            background.classList.remove('show');
+            eventWrapper.classList.remove('lowered');
+            eventText.className = 'event-text';
+          }, 2500);
+        }, 1000);
+      }, 5000);
+    }
   }
 
   document.addEventListener('keydown', e => {
     const key = e.key.toLowerCase();
-    if (key === 't') triggerEvent('#ffcc00', 'TRY!', false);
-    if (key === 'g') triggerEvent('#00ff00', 'GOAL!', false);
-    if (key === 'p') triggerEvent('#ffffff', 'PENALTY!', false);
-    if (key === 'c') triggerEvent('#FFFF00', "CAPTAIN'S CHALLENGE", false);
-    if (key === 'n') triggerEvent('#ff0000', 'NO TRY!', false);
-    if (key === 'f') triggerEvent('#00bfff', 'FIELD GOAL!', false);
-    if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING', true);
-    if (key === 'd') triggerEvent('orange', 'DROPOUT!', false);
-    if (key === '6') triggerEvent('purple', '6 AGAIN!', false);
-    if (key === ' ') triggerEvent('purple', 'Cosmic is daddy no diddy (I am sorry Leaguie)', false);
-    if (key === '4') triggerEvent('red', 'THE 14-0 CURSE IS NOT REAL', false);
+    if (key === 't') triggerEvent('gradient', 'TRY!');
+    if (key === 'g') triggerEvent('gradient', 'GOAL!');
+    if (key === 'p') triggerEvent('#ffffff', 'PENALTY!');
+    if (key === 'c') triggerEvent('#FFFF00', "CAPTAIN'S CHALLENGE");
+    if (key === 'n') triggerEvent('#ff0000', 'NO TRY!');
+    if (key === 'f') triggerEvent('#00bfff', 'FIELD GOAL!');
+    if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING');
+    if (key === 'r') triggerEvent('#ff0000', 'RED LINE INCOMING');
+    if (key === 'd') triggerEvent('orange', 'DROPOUT!');
+    if (key === '6') triggerEvent('purple', '6 AGAIN!');
+    if (key === ' ') triggerEvent('purple', 'Cosmic is daddy no diddy (I am sorry Leaguie)');
+    if (key === '4') triggerEvent('red', 'THE 14-0 CURSE IS NOT REAL');
   });
 
   window.onload = () => {
     background.classList.remove('show');
     lineContainer.style.display = 'none';
-    eventText.style.display = 'none';
+    eventWrapper.style.display = 'none';
   };
 </script>
 
