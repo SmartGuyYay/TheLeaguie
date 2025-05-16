@@ -102,13 +102,15 @@
     lineContainer.style.display = 'block';
     eventWrapper.style.display = 'flex';
 
-    // Set line color
     if (text === "RED LINE INCOMING") {
       lineContainer.style.background = '#ff0000';
       eventText.style.color = 'white';
-    } else if (text === "YELLOW LINE INCOMING") {
+    } else if (text === "YELLOW LINE INCOMING" || text === "CAPTAIN'S CHALLENGE" || text === "PENALTY!") {
       lineContainer.style.background = 'yellow';
-      eventText.style.color = 'black';
+      eventText.style.color = '#000000';  // black text for these
+    } else if (text === "GOAL!" || text === "TRY!") {
+      lineContainer.style.background = type;
+      eventText.style.color = '#000000';  // black text for goal and try
     } else if (type === 'gradient') {
       lineContainer.style.background = 'linear-gradient(to right, maroon, blue)';
       eventText.style.color = 'white';
@@ -125,9 +127,9 @@
     eventText.style.animation = '';
     eventText.style.opacity = 0;
     eventText.style.fontSize = '0';
-    eventText.textContent = '';  // clear text to avoid showing early
+    eventText.textContent = '';  // clear text early
 
-    // Reveal text AFTER line width hits 100vw (after 1.5s, half the animation)
+    // Reveal text after line expands halfway
     setTimeout(() => {
       eventText.textContent = text;
 
@@ -136,7 +138,6 @@
         eventText.classList.add('lowered-text');
       }
 
-      // Animate reveal text fade-in and scale
       eventText.style.animation = 'revealText 1s forwards';
     }, 1600);
 
@@ -168,7 +169,6 @@
         }, 1000);
       }, 3200);
     } else {
-      // For other events, close line + fade text after 5s total
       setTimeout(() => {
         setTimeout(() => {
           lineContainer.style.animation = 'closeLine 2.5s forwards';
@@ -189,7 +189,7 @@
     const key = e.key.toLowerCase();
     if (key === 't') triggerEvent('#ffcc00', 'TRY!');
     if (key === 'g') triggerEvent('#00ff00', 'GOAL!');
-    if (key === 'p') triggerEvent('#ffffff', 'PENALTY!');
+    if (key === 'p') triggerEvent('white', 'PENALTY!');
     if (key === 'c') triggerEvent('#FFFF00', "CAPTAIN'S CHALLENGE");
     if (key === 'n') triggerEvent('#FFFF00', 'NO TRY!');
     if (key === 'f') triggerEvent('#00bfff', 'FIELD GOAL!');
