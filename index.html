@@ -1,90 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>TheLeaguie Live Stream Animation</title>
-  <style>
-    html, body {
-      margin: 0; padding: 0; height: 100%; overflow: hidden;
-      font-family: 'Arial Black', sans-serif;
-    }
-    .background {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: black;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 998;
-      transition: opacity 0.5s ease;
-    }
-    .background.show { opacity: 1; }
-
-    .line-container {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 5px;
-      z-index: 1000;
-      overflow: hidden;
-      display: none;
-      transform: translate(-50%, -50%);
-    }
-    @keyframes expandLine {
-      0% { width: 0; height: 5px; }
-      50% { width: 100vw; height: 5px; }
-      100% { width: 100vw; height: 100vh; }
-    }
-    @keyframes closeLine {
-      0% { width: 100vw; height: 100vh; }
-      50% { width: 100vw; height: 5px; }
-      100% { width: 0; height: 5px; }
-    }
-
-    .event-wrapper {
-      position: fixed;
-      width: 100vw;
-      height: 100vh;
-      display: none;
-      justify-content: center;
-      z-index: 1001;
-      pointer-events: none;
-      align-items: center;
-      top: 0;
-      left: 0;
-    }
-
-    .event-text {
-      color: white;
-      font-size: 0;
-      opacity: 0;
-      font-weight: 900;
-      text-align: center;
-      animation-fill-mode: forwards;
-      position: relative;
-      top: 0;
-      transform: translate(0, 0);
-      transition: font-size 0.3s ease, top 0.3s ease, opacity 0.3s ease;
-    }
-
-    .event-wrapper.lowered {
-      align-items: flex-start;
-      padding-top: 55vh;
-    }
-    .event-text.lowered-text {
-      font-size: 3em !important;
-    }
-
-    @keyframes revealText {
-      0% { opacity: 0; font-size: 2em; }
-      100% { opacity: 1; font-size: 6em; }
-    }
-    @keyframes fadeText {
-      0% { opacity: 1; font-size: 6em; }
-      100% { opacity: 0; font-size: 0; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<title>TheLeaguie Live Stream Animation</title>
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%; overflow: hidden;
+    font-family: 'Arial Black', sans-serif;
+  }
+  .background {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: black;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 998;
+    transition: opacity 0.5s ease;
+  }
+  .background.show {
+    opacity: 1;
+  }
+  .line-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 5px;
+    z-index: 1000;
+    overflow: hidden;
+    display: none;
+    transform: translate(-50%, -50%);
+  }
+  @keyframes expandLine {
+    0% { width: 0; height: 5px; }
+    50% { width: 100vw; height: 5px; }
+    100% { width: 100vw; height: 100vh; }
+  }
+  @keyframes closeLine {
+    0% { width: 100vw; height: 100vh; }
+    50% { width: 100vw; height: 5px; }
+    100% { width: 0; height: 5px; }
+  }
+  .event-wrapper {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    justify-content: center;
+    z-index: 1001;
+    pointer-events: none;
+    align-items: center;
+    top: 0;
+    left: 0;
+  }
+  .event-text {
+    color: white;
+    font-size: 0;
+    opacity: 0;
+    font-weight: 900;
+    text-align: center;
+    animation-fill-mode: forwards;
+    position: relative;
+    top: 0;
+    transform: translate(0, 0);
+    transition: font-size 0.3s ease, top 0.3s ease, opacity 0.3s ease;
+  }
+  .event-wrapper.lowered {
+    align-items: flex-start;
+    padding-top: 55vh;
+  }
+  .event-text.lowered-text {
+    font-size: 3em !important;
+  }
+  @keyframes revealText {
+    0% { opacity: 0; font-size: 2em; }
+    100% { opacity: 1; font-size: 6em; }
+  }
+  @keyframes fadeText {
+    0% { opacity: 1; font-size: 6em; }
+    100% { opacity: 0; font-size: 0; }
+  }
+</style>
 </head>
 <body>
 
@@ -100,82 +97,6 @@
   const eventWrapper = document.getElementById('event-wrapper');
   const eventText = document.getElementById('event-text');
 
-  const goofyPhrases = [
-    "I use unpaid child labour",
-    "I bricked that tackle on purpose",
-    "I got cooked like a Woolies roast chook",
-    "I passed it to the other team for fun",
-    "I train exclusively on FIFA",
-    "I skipped warmup for a Macca’s run",
-    "I told the ref he smells like a foot",
-    "I’m playing defence with pure vibes",
-    "I fumbled the ball to make it interesting",
-    "I lag IRL sometimes",
-    "I peaked in under-12s footy",
-    "I celebrate knock-ons like tries",
-    "I wrote this code mid-head clash",
-    "I bet $5 on the other team",
-    "I watched one YouTube highlight and thought I was ready",
-    "I yell 'six again' even when it’s not",
-    "I run like a glitching GTA NPC",
-    "I think forward passes are just a suggestion",
-    "I try to look tough but trip over my own feet",
-    "I bring the vibes, not the skills",
-    "I lost the ball and blamed the wind",
-    "I think the offside rule is a conspiracy",
-    "I once scored an own goal and called it art",
-    "I warm up by flexing in the mirror",
-    "I think ‘scrum’ means a snack break",
-    "I show up late but look fresh",
-    "I’m the king of accidental fouls",
-    "I talk trash but can’t back it up",
-    "I confuse the ball with my shoe",
-    "I get tackled more than I tackle",
-    "I celebrate too early and get embarrassed",
-    "I only know the team colours, not the rules",
-    "I pretend to know what I’m doing",
-    "I get lost on the field and take detours",
-    "I forget which side I’m on",
-    "I’m allergic to practice",
-    "I call timeouts for no reason",
-    "I score points by accident",
-    "I celebrate like I scored a try, but I dropped it",
-    "I watch rugby highlights while on the bench",
-    "I’m more hype than help",
-    "I make the crowd laugh, not the coach",
-    "I’m a pro at the post-game snacks",
-    "I cheer louder than I play",
-    "I bring drama, not defence",
-    "I miss tackles like I miss the bus",
-    "I play like it’s my first day every game",
-    "I can’t tell a knock-on from a handball",
-    "I call myself captain, no one else does",
-    "I’m always the last one to know the rules",
-    "I dribble like it’s basketball",
-    "I blame my boots when I slip",
-    "I warm up by staring at the field",
-    "I think the ball is a hot potato",
-    "I argue with the ref instead of playing",
-    "I score tries on the wrong team",
-    "I bring the snack table, not the skills",
-    "I run backwards and call it strategy",
-    "I’m a legend in my own mind",
-    "I forget the ball in my hand",
-    "I throw passes that only dogs catch",
-    "I’m sponsored by bad decisions",
-    "I play footy like it’s a dance-off",
-    "I’m the master of the accidental knock-on",
-    "I cheer for the other team when I’m bored",
-    "I take the scenic route around the field",
-    "I play like I’m on a roller coaster",
-    "I think ‘try’ means ‘take a nap’",
-    "I’m an expert at causing scrums",
-    "I bring chaos, not clarity",
-    "I’m always one tackle behind",
-    "I practice my victory dance more than the game"
-  ];
-
-
   function triggerEvent(type, text) {
     background.classList.add('show');
     lineContainer.style.display = 'block';
@@ -186,13 +107,13 @@
       eventText.style.color = 'white';
     } else if (text === "YELLOW LINE INCOMING" || text === "CAPTAIN'S CHALLENGE") {
       lineContainer.style.background = 'yellow';
-      eventText.style.color = '#000';
+      eventText.style.color = '#000000';
     } else if (text === "PENALTY!") {
-      lineContainer.style.background = 'white';
-      eventText.style.color = '#000';
-    } else if (text === "GOAL!" || text === "TRY!" || text === "NO TRY!") {
+      lineContainer.style.background = 'yellow'; // changed from red to yellow
+      eventText.style.color = '#000000';
+    } else if (text === "GOAL!" || text === "TRY!") {
       lineContainer.style.background = type;
-      eventText.style.color = '#000';
+      eventText.style.color = '#000000';
     } else if (type === 'gradient') {
       lineContainer.style.background = 'linear-gradient(to right, maroon, blue)';
       eventText.style.color = 'white';
@@ -213,7 +134,7 @@
     setTimeout(() => {
       eventText.textContent = text;
 
-      if (["CAPTAIN'S CHALLENGE", "YELLOW LINE INCOMING", "RED LINE INCOMING"].includes(text)) {
+      if (text === "CAPTAIN'S CHALLENGE" || text === "YELLOW LINE INCOMING" || text === "RED LINE INCOMING") {
         eventWrapper.classList.add('lowered');
         eventText.classList.add('lowered-text');
       }
@@ -221,7 +142,7 @@
       eventText.style.animation = 'revealText 1s forwards';
     }, 1600);
 
-    if (["YELLOW LINE INCOMING", "RED LINE INCOMING"].includes(text)) {
+    if (text === "YELLOW LINE INCOMING" || text === "RED LINE INCOMING") {
       setTimeout(() => {
         let countdown = 5;
         eventText.style.fontSize = '6em';
@@ -232,10 +153,12 @@
           countdown--;
           if (countdown < 0) {
             clearInterval(countdownInterval);
+
             setTimeout(() => {
               eventText.style.animation = 'fadeText 0.5s forwards';
               lineContainer.style.animation = 'closeLine 2.5s forwards';
             }, 500);
+
             setTimeout(() => {
               lineContainer.style.display = 'none';
               eventWrapper.style.display = 'none';
@@ -263,22 +186,6 @@
     }
   }
 
-  // Trigger a goofy phrase with random colour automatically every 10-15 seconds
-  function triggerGoofyPhrase() {
-    const phrase = goofyPhrases[Math.floor(Math.random() * goofyPhrases.length)];
-    const color = '#' + Math.floor(Math.random() * 16777215).toString(16);
-    triggerEvent(color, phrase);
-  }
-
-  function startAutoGoofy() {
-    // Random delay between 10 and 15 seconds
-    const delay = Math.floor(Math.random() * 5000) + 10000;
-    setTimeout(() => {
-      triggerGoofyPhrase();
-      startAutoGoofy(); // Repeat
-    }, delay);
-  }
-
   document.addEventListener('keydown', e => {
     const key = e.key.toLowerCase();
     if (key === 't') triggerEvent('#ffcc00', 'TRY!');
@@ -299,7 +206,6 @@
     background.classList.remove('show');
     lineContainer.style.display = 'none';
     eventWrapper.style.display = 'none';
-    startAutoGoofy();
   };
 </script>
 
