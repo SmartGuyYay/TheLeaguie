@@ -105,12 +105,15 @@
     if (text === "RED LINE INCOMING") {
       lineContainer.style.background = '#ff0000';
       eventText.style.color = 'white';
-    } else if (text === "YELLOW LINE INCOMING" || text === "CAPTAIN'S CHALLENGE" || text === "PENALTY!") {
+    } else if (text === "YELLOW LINE INCOMING" || text === "CAPTAIN'S CHALLENGE") {
       lineContainer.style.background = 'yellow';
-      eventText.style.color = '#000000';  // black text for these
+      eventText.style.color = '#000000';
+    } else if (text === "PENALTY!") {
+      lineContainer.style.background = 'white';
+      eventText.style.color = '#000000'; // Make penalty text black
     } else if (text === "GOAL!" || text === "TRY!") {
       lineContainer.style.background = type;
-      eventText.style.color = '#000000';  // black text for goal and try
+      eventText.style.color = '#000000';
     } else if (type === 'gradient') {
       lineContainer.style.background = 'linear-gradient(to right, maroon, blue)';
       eventText.style.color = 'white';
@@ -119,7 +122,6 @@
       eventText.style.color = 'white';
     }
 
-    // Start line expand animation
     lineContainer.style.animation = 'expandLine 3s forwards';
 
     eventWrapper.classList.remove('lowered');
@@ -127,9 +129,8 @@
     eventText.style.animation = '';
     eventText.style.opacity = 0;
     eventText.style.fontSize = '0';
-    eventText.textContent = '';  // clear text early
+    eventText.textContent = '';
 
-    // Reveal text after line expands halfway
     setTimeout(() => {
       eventText.textContent = text;
 
@@ -189,7 +190,7 @@
     const key = e.key.toLowerCase();
     if (key === 't') triggerEvent('#ffcc00', 'TRY!');
     if (key === 'g') triggerEvent('#00ff00', 'GOAL!');
-    if (key === 'p') triggerEvent('white', 'PENALTY!');
+    if (key === 'p') triggerEvent('', 'PENALTY!');
     if (key === 'c') triggerEvent('#FFFF00', "CAPTAIN'S CHALLENGE");
     if (key === 'n') triggerEvent('#FFFF00', 'NO TRY!');
     if (key === 'f') triggerEvent('#00bfff', 'FIELD GOAL!');
