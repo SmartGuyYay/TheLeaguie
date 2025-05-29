@@ -1,175 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>TheLeaguie Live Stream Animation</title>
-<style>
-  html, body {
-    margin: 0; padding: 0; height: 100%; overflow: hidden;
-    font-family: 'Arial Black', sans-serif;
-  }
-  .background {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: black;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 998;
-    transition: opacity 0.5s ease;
-  }
-  .background.show {
-    opacity: 1;
-  }
-  .line-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 5px;
-    z-index: 1000;
-    overflow: hidden;
-    display: none;
-    transform: translate(-50%, -50%);
-  }
-  @keyframes expandLine {
-    0% { width: 0; height: 5px; }
-    50% { width: 100vw; height: 5px; }
-    100% { width: 100vw; height: 100vh; }
-  }
-  @keyframes closeLine {
-    0% { width: 100vw; height: 100vh; }
-    50% { width: 100vw; height: 5px; }
-    100% { width: 0; height: 5px; }
-  }
-  .event-wrapper {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    display: none;
-    justify-content: center;
-    z-index: 1001;
-    pointer-events: none;
-    align-items: center;
-    top: 0;
-    left: 0;
-  }
-  .event-text {
-    color: white;
-    font-size: 0;
-    opacity: 0;
-    font-weight: 900;
-    text-align: center;
-    animation-fill-mode: forwards;
-    position: relative;
-    top: 0;
-    transform: translate(0, 0);
-    transition: font-size 0.3s ease, top 0.3s ease, opacity 0.3s ease;
-  }
-  .event-wrapper.lowered {
-    align-items: flex-start;
-    padding-top: 55vh;
-  }
-  .event-text.lowered-text {
-    font-size: 3em !important;
-  }
-  @keyframes revealText {
-    0% { opacity: 0; font-size: 2em; }
-    100% { opacity: 1; font-size: 6em; }
-  }
-  @keyframes fadeText {
-    0% { opacity: 1; font-size: 6em; }
-    100% { opacity: 0; font-size: 0; }
-  }
-</style>
+  <meta charset="UTF-8" />
+  <title>Rugby Overlay Animation</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Arial Black', sans-serif;
+    }
+
+    .background {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: black;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 998;
+      transition: opacity 0.5s ease;
+    }
+
+    .background.show {
+      opacity: 1;
+    }
+
+    .line-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 5px;
+      z-index: 1000;
+      overflow: hidden;
+      display: none;
+      transform: translate(-50%, -50%);
+    }
+
+    @keyframes expandLine {
+      0% { width: 0; height: 5px; }
+      50% { width: 100vw; height: 5px; }
+      100% { width: 100vw; height: 100vh; }
+    }
+
+    @keyframes closeLine {
+      0% { width: 100vw; height: 100vh; }
+      50% { width: 100vw; height: 5px; }
+      100% { width: 0; height: 5px; }
+    }
+
+    .event-wrapper {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1001;
+      pointer-events: none;
+    }
+
+    .event-text {
+      color: white;
+      font-size: 0;
+      opacity: 0;
+      font-weight: 900;
+      text-align: center;
+      animation-fill-mode: forwards;
+    }
+
+    @keyframes revealText {
+      0% { opacity: 0; font-size: 2em; }
+      100% { opacity: 1; font-size: 6em; }
+    }
+
+    @keyframes fadeText {
+      0% { opacity: 1; font-size: 6em; }
+      100% { opacity: 0; font-size: 0; }
+    }
+  </style>
 </head>
 <body>
 
-<div id="background" class="background"></div>
-<div id="line-container" class="line-container"></div>
-<div id="event-wrapper" class="event-wrapper">
-  <div id="event-text" class="event-text"></div>
-</div>
+  <div id="background" class="background"></div>
+  <div id="line-container" class="line-container"></div>
+  <div id="event-wrapper" class="event-wrapper">
+    <div id="event-text" class="event-text"></div>
+  </div>
 
-<script>
-  const background = document.getElementById('background');
-  const lineContainer = document.getElementById('line-container');
-  const eventWrapper = document.getElementById('event-wrapper');
-  const eventText = document.getElementById('event-text');
+  <script>
+    const background = document.getElementById('background');
+    const lineContainer = document.getElementById('line-container');
+    const eventWrapper = document.getElementById('event-wrapper');
+    const eventText = document.getElementById('event-text');
 
-  function triggerEvent(type, text) {
-    background.classList.add('show');
-    lineContainer.style.display = 'block';
-    eventWrapper.style.display = 'flex';
+    function triggerEvent(type, text) {
+      background.classList.add('show');
+      lineContainer.style.display = 'block';
+      eventWrapper.style.display = 'flex';
 
-    if (text === "RED LINE INCOMING") {
-      lineContainer.style.background = '#ff0000';
-      eventText.style.color = 'white';
-    } else if (text === "YELLOW LINE INCOMING" || text === "CAPTAIN'S CHALLENGE") {
-      lineContainer.style.background = 'yellow';
-      eventText.style.color = '#000000';
-    } else if (text === "PENALTY!") {
-      lineContainer.style.background = 'white'; // changed from red to yellow
-      eventText.style.color = '#000000';
-    } else if (text === "GOAL!" || text === "TRY!") {
-      lineContainer.style.background = type;
-      eventText.style.color = '#000000';
-    } else if (type === 'gradient') {
-      lineContainer.style.background = 'linear-gradient(to right, maroon, blue)';
-      eventText.style.color = 'white';
-    } else {
-      lineContainer.style.background = type;
-      eventText.style.color = 'white';
-    }
-
-    lineContainer.style.animation = 'expandLine 3s forwards';
-
-    eventWrapper.classList.remove('lowered');
-    eventText.classList.remove('lowered-text');
-    eventText.style.animation = '';
-    eventText.style.opacity = 0;
-    eventText.style.fontSize = '0';
-    eventText.textContent = '';
-
-    setTimeout(() => {
-      eventText.textContent = text;
-
-      if (text === "CAPTAIN'S CHALLENGE" || text === "YELLOW LINE INCOMING" || text === "RED LINE INCOMING") {
-        eventWrapper.classList.add('lowered');
-        eventText.classList.add('lowered-text');
+      if (type === 'gradient') {
+        lineContainer.style.background = 'linear-gradient(to right, maroon, blue)';
+        eventText.style.color = 'white';
+      } else {
+        lineContainer.style.background = type;
+        eventText.style.color = 'black';
       }
 
-      eventText.style.animation = 'revealText 1s forwards';
-    }, 1600);
+      lineContainer.style.animation = 'expandLine 3s forwards';
 
-    if (text === "YELLOW LINE INCOMING" || text === "RED LINE INCOMING") {
       setTimeout(() => {
-        let countdown = 5;
-        eventText.style.fontSize = '6em';
-        eventText.style.opacity = 1;
+        eventText.textContent = text;
+        eventText.className = 'event-text';
+        eventText.style.animation = '';
 
-        const countdownInterval = setInterval(() => {
-          eventText.textContent = countdown;
-          countdown--;
-          if (countdown < 0) {
-            clearInterval(countdownInterval);
+        if (text === "Cosmic is daddy no diddy (I am sorry Leaguie)") {
+          eventText.style.fontSize = '1.5em';
+          eventText.style.opacity = 1;
+        } else {
+          eventText.style.animation = 'revealText 1.2s forwards';
+        }
+      }, 1400);
 
-            setTimeout(() => {
-              eventText.style.animation = 'fadeText 0.5s forwards';
-              lineContainer.style.animation = 'closeLine 2.5s forwards';
-            }, 500);
-
-            setTimeout(() => {
-              lineContainer.style.display = 'none';
-              eventWrapper.style.display = 'none';
-              background.classList.remove('show');
-              eventWrapper.classList.remove('lowered');
-              eventText.className = 'event-text';
-            }, 3000);
-          }
-        }, 1000);
-      }, 3200);
-    } else {
       setTimeout(() => {
         setTimeout(() => {
           lineContainer.style.animation = 'closeLine 2.5s forwards';
@@ -178,36 +131,31 @@
             lineContainer.style.display = 'none';
             eventWrapper.style.display = 'none';
             background.classList.remove('show');
-            eventWrapper.classList.remove('lowered');
-            eventText.className = 'event-text';
           }, 2500);
         }, 1000);
       }, 5000);
     }
-  }
 
-  document.addEventListener('keydown', e => {
-    const key = e.key.toLowerCase();
-    if (key === 't') triggerEvent('#ffcc00', 'TRY!');
-    if (key === 'g') triggerEvent('#00ff00', 'GOAL!');
-    if (key === 'p') triggerEvent('white', 'PENALTY!');
-    if (key === 'c') triggerEvent('#FFFF00', "CAPTAIN'S CHALLENGE");
-    if (key === 'n') triggerEvent('#FFFF00', 'NO TRY!');
-    if (key === 'f') triggerEvent('#00bfff', 'FIELD GOAL!');
-    if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING');
-    if (key === 'r') triggerEvent('#ff0000', 'RED LINE INCOMING');
-    if (key === 'd') triggerEvent('orange', 'DROPOUT!');
-    if (key === '6') triggerEvent('purple', '6 AGAIN!');
-    if (key === ' ') triggerEvent('purple', 'Cosmic is daddy no diddy (I am sorry Leaguie)');
-    if (key === '4') triggerEvent('red', 'THE 14-0 CURSE IS NOT REAL');
-  });
+    document.addEventListener('keydown', e => {
+      const key = e.key.toLowerCase();
+      if (key === 't') triggerEvent('gradient', 'TRY!');
+      if (key === 'g') triggerEvent('gradient', 'GOAL!');
+      if (key === 'p') triggerEvent('#ffffff', 'PENALTY!');
+      if (key === 'c') triggerEvent('#FFFF00', "CAPTAIN'S CHALLENGE");
+      if (key === 'n') triggerEvent('#ff0000', 'NO TRY!');
+      if (key === 'f') triggerEvent('#00bfff', 'FIELD GOAL!');
+      if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING');
+      if (key === 'd') triggerEvent('orange', 'DROPOUT!');
+      if (key === '6') triggerEvent('purple', '6 AGAIN!');
+      if (key === ' ') triggerEvent('purple', 'Cosmic is daddy no diddy (I am sorry Leaguie)');
+      if (key === '4') triggerEvent('red', 'THE 14-0 CURSE IS NOT REAL');
+    });
 
-  window.onload = () => {
-    background.classList.remove('show');
-    lineContainer.style.display = 'none';
-    eventWrapper.style.display = 'none';
-  };
-</script>
-
+    window.onload = () => {
+      background.classList.remove('show');
+      lineContainer.style.display = 'none';
+      eventWrapper.style.display = 'none';
+    };
+  </script>
 </body>
 </html>
