@@ -140,7 +140,7 @@
       }
 
       eventText.style.animation = 'revealText 1s forwards';
-    }, 1600);
+    }, 1500);
 
     if (text === "YELLOW LINE INCOMING" || text === "RED LINE INCOMING") {
       setTimeout(() => {
@@ -192,7 +192,7 @@
     if (key === 'g') triggerEvent('#ffcc00', 'GOAL!');
     if (key === 'p') triggerEvent('white', 'PENALTY!');
     if (key === 'c') triggerEvent('#FFFF00', "CAPTAIN'S CHALLENGE");
-    if (key === 'n') triggerEvent('#FFFF00', 'NO TRY!');
+    if (key === 'n') triggerEvent('red', 'NO TRY!');
     if (key === 'f') triggerEvent('#00bfff', 'FIELD GOAL!');
     if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING');
     if (key === 'r') triggerEvent('#ff0000', 'RED LINE INCOMING');
