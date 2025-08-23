@@ -209,22 +209,23 @@
   document.addEventListener('keydown', e => {
     const key = e.key.toLowerCase();
     if (key === 't') triggerEvent('#00ff00', 'TRY!');
-    if (key === 'g') triggerEvent('#00ff00', 'GOAL!');
-    if (key === 'p') triggerEvent('green', 'PENALTY!');
+    if (key === 'g') triggerEvent('#ffcc00', 'GOAL!');
+    if (key === 'p') triggerEvent('white', 'PENALTY!');
     if (key === 'c') triggerEvent('#FFFF00', "CAPTAIN'S CHALLENGE");
     if (key === 'n') triggerEvent('red', 'NO TRY!');
     if (key === 'f') triggerEvent('#00bfff', 'FIELD GOAL!');
     if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING');
     if (key === 'r') triggerEvent('#ff0000', 'RED LINE INCOMING');
-    if (key === 'd') triggerEvent('green', 'DROPOUT!');
-    if (key === '6') triggerEvent('green', '6 AGAIN!');
+    if (key === 'd') triggerEvent('orange', 'DROPOUT!');
+    if (key === '6') triggerEvent('purple', '6 AGAIN!');
     if (key === 'e') triggerEvent('gold', 'GOLDEN POINT!');
     if (key === '1') triggerEvent('red', 'THE 14-0 CURSE IS NOT REAL');
-    if (key === '4') triggerEvent('green', '40/20');
+    if (key === '4') triggerEvent('red', '40/20');
 
     // Image on L key
     if (key === 'l') triggerImage("chancesareyoureabouttolose.webp");
-  });
+    if (key === 'w') triggerImage("telstra.jpg");
+});
 
   window.onload = () => {
     background.classList.remove('show');
