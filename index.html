@@ -8,6 +8,8 @@
     margin: 0; padding: 0; height: 100%; overflow: hidden;
     font-family: 'Arial Black', sans-serif;
   }
+
+  /* Background overlay (used for line/text events only) */
   .background {
     position: fixed;
     top: 0; left: 0;
@@ -21,6 +23,8 @@
   .background.show {
     opacity: 1;
   }
+
+  /* Line animations */
   .line-container {
     position: fixed;
     top: 50%;
@@ -42,18 +46,23 @@
     50% { width: 100vw; height: 5px; }
     100% { width: 0; height: 5px; }
   }
+
+  /* Event wrapper */
   .event-wrapper {
     position: fixed;
     width: 100vw;
     height: 100vh;
     display: none;
     justify-content: center;
-    z-index: 1001;
-    pointer-events: none;
     align-items: center;
     top: 0;
     left: 0;
+    z-index: 1001;
+    pointer-events: none;
+    overflow: hidden;
   }
+
+  /* Event text */
   .event-text {
     color: white;
     font-size: 0;
@@ -61,9 +70,6 @@
     font-weight: 900;
     text-align: center;
     animation-fill-mode: forwards;
-    position: relative;
-    top: 0;
-    transform: translate(0, 0);
     transition: font-size 0.3s ease, top 0.3s ease, opacity 0.3s ease;
   }
   .event-wrapper.lowered {
@@ -81,6 +87,19 @@
     0% { opacity: 1; font-size: 6em; }
     100% { opacity: 0; font-size: 0; }
   }
+
+  /* Image overlay */
+  #event-image {
+    width: 100vw;     
+    height: auto;     
+    opacity: 0;
+    transform: scaleX(0); 
+    transition: transform 1s ease, opacity 1s ease;
+  }
+  #event-image.show {
+    opacity: 1;
+    transform: scaleX(1); 
+  }
 </style>
 </head>
 <body>
@@ -89,6 +108,7 @@
 <div id="line-container" class="line-container"></div>
 <div id="event-wrapper" class="event-wrapper">
   <div id="event-text" class="event-text"></div>
+  <img id="event-image" src="" alt="Event Image" />
 </div>
 
 <script>
@@ -96,24 +116,51 @@
   const lineContainer = document.getElementById('line-container');
   const eventWrapper = document.getElementById('event-wrapper');
   const eventText = document.getElementById('event-text');
+  const eventImage = document.getElementById('event-image');
 
+  /* Image-only event, no black background */
+  function triggerImage(src) {
+    eventWrapper.style.display = 'flex';
+    eventText.style.display = "none"; // hide text
+    eventImage.src = src;
+    eventImage.style.display = "block";
+
+    // restart animation
+    eventImage.classList.remove("show");
+    void eventImage.offsetWidth; // force reflow
+    setTimeout(() => {
+      eventImage.classList.add("show");
+    }, 50);
+
+    // hide after 10s
+    setTimeout(() => {
+      eventImage.classList.remove("show");
+      setTimeout(() => {
+        eventWrapper.style.display = "none";
+        eventImage.style.display = "none";
+      }, 1000);
+    }, 10000);
+  }
+
+  /* Normal line/text events */
   function triggerEvent(type, text) {
     background.classList.add('show');
     lineContainer.style.display = 'block';
     eventWrapper.style.display = 'flex';
 
+    // Set line and text colors
     if (text === "RED LINE INCOMING") {
       lineContainer.style.background = '#ff0000';
       eventText.style.color = 'white';
     } else if (text === "YELLOW LINE INCOMING" || text === "CAPTAIN'S CHALLENGE") {
       lineContainer.style.background = 'yellow';
-      eventText.style.color = '#000000';
+      eventText.style.color = '#000';
     } else if (text === "PENALTY!") {
-      lineContainer.style.background = 'white'; // changed from red to yellow
-      eventText.style.color = '#000000';
+      lineContainer.style.background = 'white';
+      eventText.style.color = '#000';
     } else if (text === "GOAL!" || text === "TRY!") {
       lineContainer.style.background = type;
-      eventText.style.color = '#000000';
+      eventText.style.color = '#000';
     } else if (type === 'gradient') {
       lineContainer.style.background = 'linear-gradient(to right, maroon, blue)';
       eventText.style.color = 'white';
@@ -123,13 +170,16 @@
     }
 
     lineContainer.style.animation = 'expandLine 3s forwards';
-
     eventWrapper.classList.remove('lowered');
     eventText.classList.remove('lowered-text');
     eventText.style.animation = '';
     eventText.style.opacity = 0;
     eventText.style.fontSize = '0';
     eventText.textContent = '';
+
+    // Hide image for normal events
+    eventImage.style.display = "none"; 
+    eventText.style.display = "block";
 
     setTimeout(() => {
       eventText.textContent = text;
@@ -142,57 +192,26 @@
       eventText.style.animation = 'revealText 1s forwards';
     }, 1500);
 
-    if (text === "YELLOW LINE INCOMING" || text === "RED LINE INCOMING") {
+    setTimeout(() => {
+      lineContainer.style.animation = 'closeLine 2.5s forwards';
+      eventText.style.animation = 'fadeText 2.5s forwards';
       setTimeout(() => {
-        let countdown = 5;
-        eventText.style.fontSize = '6em';
-        eventText.style.opacity = 1;
-
-        const countdownInterval = setInterval(() => {
-          eventText.textContent = countdown;
-          countdown--;
-          if (countdown < 0) {
-            clearInterval(countdownInterval);
-
-            setTimeout(() => {
-              eventText.style.animation = 'fadeText 0.5s forwards';
-              lineContainer.style.animation = 'closeLine 2.5s forwards';
-            }, 500);
-
-            setTimeout(() => {
-              lineContainer.style.display = 'none';
-              eventWrapper.style.display = 'none';
-              background.classList.remove('show');
-              eventWrapper.classList.remove('lowered');
-              eventText.className = 'event-text';
-            }, 3000);
-          }
-        }, 1000);
-      }, 3200);
-    } else {
-      setTimeout(() => {
-        setTimeout(() => {
-          lineContainer.style.animation = 'closeLine 2.5s forwards';
-          eventText.style.animation = 'fadeText 2.5s forwards';
-          setTimeout(() => {
-            lineContainer.style.display = 'none';
-            eventWrapper.style.display = 'none';
-            background.classList.remove('show');
-            eventWrapper.classList.remove('lowered');
-            eventText.className = 'event-text';
-          }, 2500);
-        }, 1000);
-      }, 5000);
-    }
+        lineContainer.style.display = 'none';
+        eventWrapper.style.display = 'none';
+        background.classList.remove('show');
+        eventWrapper.classList.remove('lowered');
+        eventText.className = 'event-text';
+      }, 2500);
+    }, 5000);
   }
 
+  /* Key press handlers */
   document.addEventListener('keydown', e => {
     const key = e.key.toLowerCase();
     if (key === 't') triggerEvent('#00ff00', 'TRY!');
     if (key === 'g') triggerEvent('#ffcc00', 'GOAL!');
     if (key === 'p') triggerEvent('white', 'PENALTY!');
     if (key === 'c') triggerEvent('#FFFF00', "CAPTAIN'S CHALLENGE");
-    if (key === 'e') triggerEvent('#FFFF00', "Glitched WILL make TheLeaguie eat a roosters cake");
     if (key === 'n') triggerEvent('red', 'NO TRY!');
     if (key === 'f') triggerEvent('#00bfff', 'FIELD GOAL!');
     if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING');
@@ -200,15 +219,18 @@
     if (key === 'd') triggerEvent('orange', 'DROPOUT!');
     if (key === '6') triggerEvent('purple', '6 AGAIN!');
     if (key === 'e') triggerEvent('gold', 'GOLDEN POINT!');
-    if (key === ' ') triggerEvent('purple', 'Cosmic is daddy no diddy (I am sorry Leaguie)');
     if (key === '1') triggerEvent('red', 'THE 14-0 CURSE IS NOT REAL');
     if (key === '4') triggerEvent('red', '40/20');
+
+    // Image on L key
+    if (key === 'l') triggerImage("chancesareyoureabouttolose.webp");
   });
 
   window.onload = () => {
     background.classList.remove('show');
     lineContainer.style.display = 'none';
     eventWrapper.style.display = 'none';
+    eventImage.style.display = 'none';
   };
 </script>
 
