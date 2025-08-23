@@ -9,7 +9,6 @@
     font-family: 'Arial Black', sans-serif;
   }
 
-  /* Background overlay (used for line/text events only) */
   .background {
     position: fixed;
     top: 0; left: 0;
@@ -20,11 +19,8 @@
     z-index: 998;
     transition: opacity 0.5s ease;
   }
-  .background.show {
-    opacity: 1;
-  }
+  .background.show { opacity: 1; }
 
-  /* Line animations */
   .line-container {
     position: fixed;
     top: 50%;
@@ -47,7 +43,6 @@
     100% { width: 0; height: 5px; }
   }
 
-  /* Event wrapper */
   .event-wrapper {
     position: fixed;
     width: 100vw;
@@ -55,6 +50,7 @@
     display: none;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     top: 0;
     left: 0;
     z-index: 1001;
@@ -62,7 +58,6 @@
     overflow: hidden;
   }
 
-  /* Event text */
   .event-text {
     color: white;
     font-size: 0;
@@ -70,15 +65,33 @@
     font-weight: 900;
     text-align: center;
     animation-fill-mode: forwards;
-    transition: font-size 0.3s ease, top 0.3s ease, opacity 0.3s ease;
+    transition: font-size 0.3s ease, opacity 0.3s ease;
   }
-  .event-wrapper.lowered {
-    align-items: flex-start;
-    padding-top: 55vh;
+
+  .event-subtext {
+    margin-top: 10px;
+    text-align: center;
+    color: white;
+    font-size: 3em;
+    opacity: 0;
+    transition: opacity 0.5s ease;
   }
-  .event-text.lowered-text {
-    font-size: 3em !important;
+  
+  .event-extra {
+      margin-top: 10px;
+      text-align: center;
+      color: yellow;
+      font-size: 2em;
+      opacity: 0;
+      transition: opacity 0.5s ease;
   }
+  
+  .event-subtext img {
+    height: 30px;
+    vertical-align: middle;
+    margin-left: 8px;
+  }
+
   @keyframes revealText {
     0% { opacity: 0; font-size: 2em; }
     100% { opacity: 1; font-size: 6em; }
@@ -88,7 +101,6 @@
     100% { opacity: 0; font-size: 0; }
   }
 
-  /* Image overlay */
   #event-image {
     width: 100vw;     
     height: auto;     
@@ -108,6 +120,8 @@
 <div id="line-container" class="line-container"></div>
 <div id="event-wrapper" class="event-wrapper">
   <div id="event-text" class="event-text"></div>
+  <div id="event-subtext" class="event-subtext"></div>
+  <div id="event-extra" class="event-extra"></div>
   <img id="event-image" src="" alt="Event Image" />
 </div>
 
@@ -116,23 +130,22 @@
   const lineContainer = document.getElementById('line-container');
   const eventWrapper = document.getElementById('event-wrapper');
   const eventText = document.getElementById('event-text');
+  const eventSubtext = document.getElementById('event-subtext');
+  const eventExtra = document.getElementById('event-extra');
   const eventImage = document.getElementById('event-image');
 
-  /* Image-only event, no black background */
   function triggerImage(src) {
     eventWrapper.style.display = 'flex';
-    eventText.style.display = "none"; // hide text
+    eventText.style.display = "none"; 
+    eventSubtext.style.display = "none"; 
+    eventExtra.style.display = "none"; 
     eventImage.src = src;
     eventImage.style.display = "block";
 
-    // restart animation
     eventImage.classList.remove("show");
-    void eventImage.offsetWidth; // force reflow
-    setTimeout(() => {
-      eventImage.classList.add("show");
-    }, 50);
+    void eventImage.offsetWidth; 
+    setTimeout(() => eventImage.classList.add("show"), 50);
 
-    // hide after 10s
     setTimeout(() => {
       eventImage.classList.remove("show");
       setTimeout(() => {
@@ -142,87 +155,94 @@
     }, 10000);
   }
 
-  /* Normal line/text events */
   function triggerEvent(type, text) {
     background.classList.add('show');
     lineContainer.style.display = 'block';
     eventWrapper.style.display = 'flex';
 
-    // Set line and text colors
-    if (text === "RED LINE INCOMING") {
-      lineContainer.style.background = '#ff0000';
-      eventText.style.color = 'white';
-    } else if (text === "YELLOW LINE INCOMING" || text === "CAPTAIN'S CHALLENGE") {
-      lineContainer.style.background = 'yellow';
-      eventText.style.color = '#000';
-    } else if (text === "PENALTY!") {
-      lineContainer.style.background = 'white';
-      eventText.style.color = '#000';
-    } else if (text === "GOAL!" || text === "TRY!") {
+    if (text === "GOAL!" || text === "TRY!") {
       lineContainer.style.background = type;
       eventText.style.color = '#000';
-    } else if (type === 'gradient') {
-      lineContainer.style.background = 'linear-gradient(to right, maroon, blue)';
-      eventText.style.color = 'white';
     } else {
       lineContainer.style.background = type;
-      eventText.style.color = 'black';
+      eventText.style.color = 'white';
     }
 
     lineContainer.style.animation = 'expandLine 3s forwards';
-    eventWrapper.classList.remove('lowered');
-    eventText.classList.remove('lowered-text');
     eventText.style.animation = '';
     eventText.style.opacity = 0;
     eventText.style.fontSize = '0';
     eventText.textContent = '';
-
-    // Hide image for normal events
     eventImage.style.display = "none"; 
     eventText.style.display = "block";
+    eventSubtext.style.display = "none"; 
+    eventExtra.style.display = "none"; 
 
     setTimeout(() => {
       eventText.textContent = text;
+      eventText.style.animation = 'revealText 1s forwards';
 
-      if (text === "CAPTAIN'S CHALLENGE" || text === "YELLOW LINE INCOMING" || text === "RED LINE INCOMING") {
-        eventWrapper.classList.add('lowered');
-        eventText.classList.add('lowered-text');
+      // Subtext + Extra only for TRY!
+      if (text === "TRY!") {
+        eventSubtext.innerHTML = `brought to you by <img src="https://logos-world.net/wp-content/uploads/2021/04/Westpac-Logo.png" alt="Westpac">`;
+        eventExtra.textContent = "Layers of scam and fraud defence";
+
+        eventSubtext.style.display = "block";
+        eventExtra.style.display = "block";
+
+        setTimeout(() => { 
+          eventSubtext.style.opacity = 1; 
+          eventExtra.style.opacity = 1; 
+        }, 500);
       }
 
-      eventText.style.animation = 'revealText 1s forwards';
+      // Subtext + Extra only for GOAL!
+      if (text === "GOAL!") {
+        eventSubtext.innerHTML = `presented by <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/McDonald%27s_square_2020.svg" alt="Telstra">`;
+        eventExtra.textContent = "Get the $6.95 McSmart meal today";
+
+        eventSubtext.style.display = "block";
+        eventExtra.style.display = "block";
+
+        setTimeout(() => { 
+          eventSubtext.style.opacity = 1; 
+          eventExtra.style.opacity = 1; 
+        }, 500);
+      }
     }, 1500);
 
     setTimeout(() => {
       lineContainer.style.animation = 'closeLine 2.5s forwards';
       eventText.style.animation = 'fadeText 2.5s forwards';
+      eventSubtext.style.opacity = 0;
+      eventExtra.style.opacity = 0;
       setTimeout(() => {
         lineContainer.style.display = 'none';
         eventWrapper.style.display = 'none';
         background.classList.remove('show');
-        eventWrapper.classList.remove('lowered');
         eventText.className = 'event-text';
+        eventSubtext.innerHTML = '';
+        eventExtra.textContent = '';
       }, 2500);
     }, 5000);
   }
 
-  /* Key press handlers */
   document.addEventListener('keydown', e => {
     const key = e.key.toLowerCase();
     if (key === 't') triggerEvent('#00ff00', 'TRY!');
-    if (key === 'g') triggerEvent('#ffcc00', 'GOAL!');
-    if (key === 'p') triggerEvent('white', 'PENALTY!');
+    if (key === 'g') triggerEvent('#00ff00', 'GOAL!');
+    if (key === 'p') triggerEvent('green', 'PENALTY!');
     if (key === 'c') triggerEvent('#FFFF00', "CAPTAIN'S CHALLENGE");
     if (key === 'n') triggerEvent('red', 'NO TRY!');
-    if (key === 'f') triggerEvent('#00bfff', 'FIELD GOAL!');
+    if (key === 'f') triggerEvent('green', 'FIELD GOAL!');
     if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING');
     if (key === 'r') triggerEvent('#ff0000', 'RED LINE INCOMING');
-    if (key === 'd') triggerEvent('orange', 'DROPOUT!');
-    if (key === '6') triggerEvent('purple', '6 AGAIN!');
+    if (key === 'd') triggerEvent('green', 'DROPOUT!');
+    if (key === '6') triggerEvent('green', '6 AGAIN!');
     if (key === 'e') triggerEvent('gold', 'GOLDEN POINT!');
     if (key === '1') triggerEvent('red', 'THE 14-0 CURSE IS NOT REAL');
-    if (key === '4') triggerEvent('red', '40/20');
+    if (key === '4') triggerEvent('green', '40/20');
 
-    // Image on L key
     if (key === 'l') triggerImage("chancesareyoureabouttolose.webp");
     if (key === 'w') triggerImage("telstra.jpeg");
 });
@@ -232,6 +252,8 @@
     lineContainer.style.display = 'none';
     eventWrapper.style.display = 'none';
     eventImage.style.display = 'none';
+    eventSubtext.style.display = 'none';
+    eventExtra.style.display = 'none';
   };
 </script>
 
