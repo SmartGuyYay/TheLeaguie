@@ -223,29 +223,6 @@
 	      }, 500);
 	    }
 		
-		// Subtext + Extra only for CAPTAIN'S CHALLENGE
-		if (text === "CAPTAIN'S CHALLENGE") {
-		  eventSubtext.innerHTML = `presented by <img src="https://download.logo.wine/logo/Harvey_Norman/Harvey_Norman-Logo.wine.png" alt="NRL">`;
-		  eventExtra.textContent = "Ref review in progress ⚡";
-		  eventSubtext.style.display = "block";
-		  eventExtra.style.display = "block";
-		  setTimeout(() => { 
-		    eventSubtext.style.opacity = 1; 
-		    eventExtra.style.opacity = 1; 
-		  }, 500);
-		}
-
-	    // Subtext + Extra only for PENALTY!
-	    if (text === "PENALTY!") {
-	      eventSubtext.innerHTML = `presented by the <img src="https://cdn.worldvectorlogo.com/logos/kia-4.svg" alt="Kia"> Tasman`;
-	      eventExtra.textContent = "Dust settles, we don't";
-	      eventSubtext.style.display = "block";
-	      eventExtra.style.display = "block";
-	      setTimeout(() => { 
-	        eventSubtext.style.opacity = 1; 
-	        eventExtra.style.opacity = 1; 
-	      }, 500);
-	    }
 
 	  }, 1500);
 
@@ -284,6 +261,7 @@
 	  if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING');
 	  if (key === 'r') triggerEvent('#ff0000', 'RED LINE INCOMING');
 	  if (key === 'd') triggerEvent('#186b22', 'DROPOUT!');
+	  if (key === 'b') triggerEvent('#186b22', 'THE BUNKER!');
 	  if (key === '6') triggerEvent('#186b22', '6 AGAIN!');
 	  if (key === 'e') triggerEvent('gold', 'GOLDEN POINT!');
 	  if (key === '1') triggerEvent('red', 'THE 14-0 CURSE IS NOT REAL');
