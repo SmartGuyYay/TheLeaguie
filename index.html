@@ -59,7 +59,7 @@
   }
 
   .event-text {
-    color: white;
+    color: black;
     font-size: 0;
     opacity: 0;
     font-weight: 900;
@@ -87,7 +87,7 @@
   }
   
   .event-subtext img {
-    height: 30px;
+    height: 50px;
     vertical-align: middle;
     margin-left: 8px;
   }
@@ -100,6 +100,17 @@
     0% { opacity: 1; font-size: 6em; }
     100% { opacity: 0; font-size: 0; }
   }
+  @keyframes revealTextSmall {
+    0% { opacity: 0; font-size: 1.5em; }
+    100% { opacity: 1; font-size: 3em; }
+  }
+
+  @keyframes fadeTextSmall {
+    0% { opacity: 1; font-size: 3em; }
+    100% { opacity: 0; font-size: 0; }
+  }
+  
+  
 
   #event-image {
     width: 100vw;     
@@ -126,135 +137,171 @@
 </div>
 
 <script>
-  const background = document.getElementById('background');
-  const lineContainer = document.getElementById('line-container');
-  const eventWrapper = document.getElementById('event-wrapper');
-  const eventText = document.getElementById('event-text');
-  const eventSubtext = document.getElementById('event-subtext');
-  const eventExtra = document.getElementById('event-extra');
-  const eventImage = document.getElementById('event-image');
+	const background = document.getElementById('background');
+	const lineContainer = document.getElementById('line-container');
+	const eventWrapper = document.getElementById('event-wrapper');
+	const eventText = document.getElementById('event-text');
+	const eventSubtext = document.getElementById('event-subtext');
+	const eventExtra = document.getElementById('event-extra');
+	const eventImage = document.getElementById('event-image');
 
-  function triggerImage(src) {
-    eventWrapper.style.display = 'flex';
-    eventText.style.display = "none"; 
-    eventSubtext.style.display = "none"; 
-    eventExtra.style.display = "none"; 
-    eventImage.src = src;
-    eventImage.style.display = "block";
+	function triggerImage(src) {
+	  eventWrapper.style.display = 'flex';
+	  eventText.style.display = "none"; 
+	  eventSubtext.style.display = "none"; 
+	  eventExtra.style.display = "none"; 
+	  eventImage.src = src;
+	  eventImage.style.display = "block";
 
-    eventImage.classList.remove("show");
-    void eventImage.offsetWidth; 
-    setTimeout(() => eventImage.classList.add("show"), 50);
+	  eventImage.classList.remove("show");
+	  void eventImage.offsetWidth; 
+	  setTimeout(() => eventImage.classList.add("show"), 50);
 
-    setTimeout(() => {
-      eventImage.classList.remove("show");
-      setTimeout(() => {
-        eventWrapper.style.display = "none";
-        eventImage.style.display = "none";
-      }, 1000);
-    }, 10000);
-  }
+	  setTimeout(() => {
+	    eventImage.classList.remove("show");
+	    setTimeout(() => {
+	      eventWrapper.style.display = "none";
+	      eventImage.style.display = "none";
+	    }, 1000);
+	  }, 10000);
+	}
 
-  function triggerEvent(type, text) {
-    background.classList.add('show');
-    lineContainer.style.display = 'block';
-    eventWrapper.style.display = 'flex';
+	function triggerEvent(type, text) {
+	  background.classList.add('show');
+	  lineContainer.style.display = 'block';
+	  eventWrapper.style.display = 'flex';
 
-    if (text === "GOAL!" || text === "TRY!") {
-      lineContainer.style.background = type;
-      eventText.style.color = '#000';
-    } else {
-      lineContainer.style.background = type;
-      eventText.style.color = 'white';
-    }
+	  if (text === "GOAL!" || text === "TRY!" || text === "PENALTY!") {
+	    lineContainer.style.background = type;
+	    eventText.style.color = '#000';
+	  } else {
+	    lineContainer.style.background = type;
+	    eventText.style.color = 'white';
+	  }
 
-    lineContainer.style.animation = 'expandLine 3s forwards';
-    eventText.style.animation = '';
-    eventText.style.opacity = 0;
-    eventText.style.fontSize = '0';
-    eventText.textContent = '';
-    eventImage.style.display = "none"; 
-    eventText.style.display = "block";
-    eventSubtext.style.display = "none"; 
-    eventExtra.style.display = "none"; 
+	  lineContainer.style.animation = 'expandLine 3s forwards';
+	  eventText.style.animation = '';
+	  eventText.style.opacity = 0;
+	  eventText.style.fontSize = '0';
+	  eventText.textContent = '';
+	  eventImage.style.display = "none"; 
+	  eventText.style.display = "block";
+	  eventSubtext.style.display = "none"; 
+	  eventExtra.style.display = "none"; 
 
-    setTimeout(() => {
-      eventText.textContent = text;
-      eventText.style.animation = 'revealText 1s forwards';
+	  setTimeout(() => {
+	    eventText.textContent = text;
 
-      // Subtext + Extra only for TRY!
-      if (text === "TRY!") {
-        eventSubtext.innerHTML = `brought to you by <img src="https://logos-world.net/wp-content/uploads/2021/04/Westpac-Logo.png" alt="Westpac">`;
-        eventExtra.textContent = "Layers of scam and fraud defence";
+	    // Smaller font for Captain's Challenge and Red Line Incoming
+	    if (text === "CAPTAIN'S CHALLENGE" || text === "YELLOW LINE INCOMING" || text === "RED LINE INCOMING") {
+	      eventText.style.animation = 'revealTextSmall 1s forwards';
+	    } else {
+	      eventText.style.animation = 'revealText 1s forwards';
+	    }
 
-        eventSubtext.style.display = "block";
-        eventExtra.style.display = "block";
+	    // Subtext + Extra only for TRY!
+	    if (text === "TRY!") {
+	      eventSubtext.innerHTML = `Brought to you by the Discord!<img src="https://static.vecteezy.com/system/resources/previews/023/986/880/non_2x/discord-logo-discord-logo-transparent-discord-icon-transparent-free-free-png.png" alt="Westpac">`;
+	      eventExtra.textContent = "Join today!";
+	      eventSubtext.style.display = "block";
+	      eventExtra.style.display = "block";
+	      setTimeout(() => { 
+	        eventSubtext.style.opacity = 1; 
+	        eventExtra.style.opacity = 1; 
+	      }, 500);
+	    }
 
-        setTimeout(() => { 
-          eventSubtext.style.opacity = 1; 
-          eventExtra.style.opacity = 1; 
-        }, 500);
-      }
+	    // Subtext + Extra only for GOAL!
+	    if (text === "GOAL!") {
+	      eventSubtext.innerHTML = `Presented by LeaguieGames!<img src="https://yt3.ggpht.com/vDAo7_gXiD26v1b6Z1isCAcbbhRusWwEEhE3ofuh1XIJ-zsuReteQpiu8qIR2qQRyTqu724iPw=s88-c-k-c0x00ffffff-no-rj" alt="Westpac">`;
+	      eventExtra.textContent = "These don't get kicked when I'm playing!";
+	      eventSubtext.style.display = "block";
+	      eventExtra.style.display = "block";
+	      setTimeout(() => { 
+	        eventSubtext.style.opacity = 1; 
+	        eventExtra.style.opacity = 1; 
+	      }, 500);
+	    }
+		
+		// Subtext + Extra only for CAPTAIN'S CHALLENGE
+		if (text === "CAPTAIN'S CHALLENGE") {
+		  eventSubtext.innerHTML = `presented by <img src="https://download.logo.wine/logo/Harvey_Norman/Harvey_Norman-Logo.wine.png" alt="NRL">`;
+		  eventExtra.textContent = "Ref review in progress ⚡";
+		  eventSubtext.style.display = "block";
+		  eventExtra.style.display = "block";
+		  setTimeout(() => { 
+		    eventSubtext.style.opacity = 1; 
+		    eventExtra.style.opacity = 1; 
+		  }, 500);
+		}
 
-      // Subtext + Extra only for GOAL!
-      if (text === "GOAL!") {
-        eventSubtext.innerHTML = `presented by <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/McDonald%27s_square_2020.svg" alt="Telstra">`;
-        eventExtra.textContent = "Get the $6.95 McSmart meal today";
+	    // Subtext + Extra only for PENALTY!
+	    if (text === "PENALTY!") {
+	      eventSubtext.innerHTML = `presented by the <img src="https://cdn.worldvectorlogo.com/logos/kia-4.svg" alt="Kia"> Tasman`;
+	      eventExtra.textContent = "Dust settles, we don't";
+	      eventSubtext.style.display = "block";
+	      eventExtra.style.display = "block";
+	      setTimeout(() => { 
+	        eventSubtext.style.opacity = 1; 
+	        eventExtra.style.opacity = 1; 
+	      }, 500);
+	    }
 
-        eventSubtext.style.display = "block";
-        eventExtra.style.display = "block";
+	  }, 1500);
 
-        setTimeout(() => { 
-          eventSubtext.style.opacity = 1; 
-          eventExtra.style.opacity = 1; 
-        }, 500);
-      }
-    }, 1500);
+	  // Fade out
+	  setTimeout(() => {
+	    lineContainer.style.animation = 'closeLine 2.5s forwards';
 
-    setTimeout(() => {
-      lineContainer.style.animation = 'closeLine 2.5s forwards';
-      eventText.style.animation = 'fadeText 2.5s forwards';
-      eventSubtext.style.opacity = 0;
-      eventExtra.style.opacity = 0;
-      setTimeout(() => {
-        lineContainer.style.display = 'none';
-        eventWrapper.style.display = 'none';
-        background.classList.remove('show');
-        eventText.className = 'event-text';
-        eventSubtext.innerHTML = '';
-        eventExtra.textContent = '';
-      }, 2500);
-    }, 5000);
-  }
+	    if (text === "CAPTAIN'S CHALLENGE" || text === "RED LINE INCOMING") {
+	      eventText.style.animation = 'fadeTextSmall 2.5s forwards';
+	    } else {
+	      eventText.style.animation = 'fadeText 2.5s forwards';
+	    }
 
-  document.addEventListener('keydown', e => {
-    const key = e.key.toLowerCase();
-    if (key === 't') triggerEvent('#00ff00', 'TRY!');
-    if (key === 'g') triggerEvent('#00ff00', 'GOAL!');
-    if (key === 'p') triggerEvent('green', 'PENALTY!');
-    if (key === 'c') triggerEvent('#FFFF00', "CAPTAIN'S CHALLENGE");
-    if (key === 'n') triggerEvent('red', 'NO TRY!');
-    if (key === 'f') triggerEvent('green', 'FIELD GOAL!');
-    if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING');
-    if (key === 'r') triggerEvent('#ff0000', 'RED LINE INCOMING');
-    if (key === 'd') triggerEvent('green', 'DROPOUT!');
-    if (key === '6') triggerEvent('green', '6 AGAIN!');
-    if (key === 'e') triggerEvent('gold', 'GOLDEN POINT!');
-    if (key === '1') triggerEvent('red', 'THE 14-0 CURSE IS NOT REAL');
-    if (key === '4') triggerEvent('green', '40/20');
+	    eventSubtext.style.opacity = 0;
+	    eventExtra.style.opacity = 0;
 
-    if (key === 'l') triggerImage("chancesareyoureabouttolose.webp");
-    if (key === 'w') triggerImage("telstra.jpeg");
-});
+	    setTimeout(() => {
+	      lineContainer.style.display = 'none';
+	      eventWrapper.style.display = 'none';
+	      background.classList.remove('show');
+	      eventText.className = 'event-text';
+	      eventSubtext.innerHTML = '';
+	      eventExtra.textContent = '';
+	    }, 2500);
+	  }, 5000);
+	}
 
-  window.onload = () => {
-    background.classList.remove('show');
-    lineContainer.style.display = 'none';
-    eventWrapper.style.display = 'none';
-    eventImage.style.display = 'none';
-    eventSubtext.style.display = 'none';
-    eventExtra.style.display = 'none';
-  };
+	document.addEventListener('keydown', e => {
+	  const key = e.key.toLowerCase();
+	  if (key === 't') triggerEvent('#186b22', 'TRY!');
+	  if (key === 'g') triggerEvent('#186b22', 'GOAL!');
+	  if (key === 'p') triggerEvent('#186b22', 'PENALTY!');
+	  if (key === 'c') triggerEvent('#186b22', "CAPTAIN'S CHALLENGE");
+	  if (key === 'n') triggerEvent('red', 'NO TRY!');
+	  if (key === 'f') triggerEvent('#186b22', 'FIELD GOAL!');
+	  if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING');
+	  if (key === 'r') triggerEvent('#ff0000', 'RED LINE INCOMING');
+	  if (key === 'd') triggerEvent('#186b22', 'DROPOUT!');
+	  if (key === '6') triggerEvent('#186b22', '6 AGAIN!');
+	  if (key === 'e') triggerEvent('gold', 'GOLDEN POINT!');
+	  if (key === '1') triggerEvent('red', 'THE 14-0 CURSE IS NOT REAL');
+	  if (key === '4') triggerEvent('green', '40/20');
+
+	  if (key === 'l') triggerImage("chancesareyoureabouttolose.webp");
+	  if (key === 'w') triggerImage("telstra.jpeg");
+	});
+
+	window.onload = () => {
+	  background.classList.remove('show');
+	  lineContainer.style.display = 'none';
+	  eventWrapper.style.display = 'none';
+	  eventImage.style.display = 'none';
+	  eventSubtext.style.display = 'none';
+	  eventExtra.style.display = 'none';
+	};
+  
 </script>
 
 </body>
