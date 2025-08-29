@@ -294,27 +294,32 @@
 	}
 
 	document.addEventListener('keydown', e => {
-	  const key = e.key.toLowerCase();
-	  if (key === 't') triggerEvent('#186b22', 'TRY!');
-	  if (key === 'g') triggerEvent('#186b22', 'GOAL!');
-	  if (key === 'p') triggerEvent('#186b22', 'PENALTY!');
-	  if (key === 'c') triggerEvent('#186b22', "CAPTAIN'S CHALLENGE");
-	  if (key === 'U') triggerEvent('#186b22', "CHALLENGE UNSUCESSFUL");
-	  if (key === 'S') triggerEvent('#186b22', "CHALLENGE SUCESSFUL");	
-	  if (key === 'n') triggerEvent('red', 'NO TRY!');
-	  if (key === 'f') triggerEvent('#186b22', 'FIELD GOAL!');
-	  if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING');
-	  if (key === 'r') triggerEvent('#ff0000', 'RED LINE INCOMING');
-	  if (key === 'd') triggerEvent('#186b22', 'DROPOUT!');
-	  if (key === 'b') triggerEvent('#186b22', 'THE BUNKER!');
-	  if (key === '6') triggerEvent('#186b22', '6 AGAIN!');
-	  if (key === 'e') triggerEvent('gold', 'GOLDEN POINT!');
-	  if (key === '1') triggerEvent('red', 'THE 14-0 CURSE IS NOT REAL');
-	  if (key === '4') triggerEvent('green', '40/20');
+  const key = e.key.toLowerCase();
 
-	  if (key === 'l') triggerImage("chancesareyoureabouttolose.webp");
-	  if (key === 'w') triggerImage("telstra.jpeg");
-	});
+  if (key === 't') triggerEvent('#186b22', 'TRY!');
+  if (key === 'g') triggerEvent('#186b22', 'GOAL!');
+  if (key === 'p') triggerEvent('#186b22', 'PENALTY!');
+  if (key === 'c') triggerEvent('#186b22', "CAPTAIN'S CHALLENGE");
+  
+  // Shift combos
+  if (e.shiftKey && key === 'u') triggerEvent('#186b22', "CHALLENGE UNSUCESSFUL");
+  if (e.shiftKey && key === 's') triggerEvent('#186b22', "CHALLENGE SUCESSFUL");
+  if (e.shiftKey && key === 'i') triggerEvent('#186b22', "INCONCLUSIVE EVIDENCE");		
+
+  if (key === 'n') triggerEvent('red', 'NO TRY!');
+  if (key === 'f') triggerEvent('#186b22', 'FIELD GOAL!');
+  if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING');
+  if (key === 'r') triggerEvent('#ff0000', 'RED LINE INCOMING');
+  if (key === 'd') triggerEvent('#186b22', 'DROPOUT!');
+  if (key === 'b') triggerEvent('#186b22', 'THE BUNKER!');
+  if (key === '6') triggerEvent('#186b22', '6 AGAIN!');
+  if (key === 'e') triggerEvent('gold', 'GOLDEN POINT!');
+  if (key === '1') triggerEvent('red', 'THE 14-0 CURSE IS NOT REAL');
+  if (key === '4') triggerEvent('green', '40/20');
+
+  if (key === 'l') triggerImage("chancesareyoureabouttolose.webp");
+  if (key === 'w') triggerImage("telstra.jpeg");
+});
 
 	window.onload = () => {
 	  background.classList.remove('show');
