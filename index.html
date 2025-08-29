@@ -273,8 +273,18 @@
 	  setTimeout(() => {
 	    lineContainer.style.animation = 'closeLine 2.5s forwards';
 
-	    if (text === "CAPTAIN'S CHALLENGE" || text === "RED LINE INCOMING") {
-	      eventText.style.animation = 'fadeTextSmall 2.5s forwards';
+if (
+  text === "CAPTAIN'S CHALLENGE" || 
+  text === "RED LINE INCOMING" || 
+  text === "CHALLENGE SUCESSFUL" || 
+  text === "INCONCLUSIVE EVIDENCE" || 
+  text === "CHALLENGE UNSUCESSFUL"
+) {
+  eventText.style.animation = 'fadeTextSmall 2.5s forwards';
+} else {
+  eventText.style.animation = 'fadeText 2.5s forwards';
+}
+
 	    } else {
 	      eventText.style.animation = 'fadeText 2.5s forwards';
 	    }
