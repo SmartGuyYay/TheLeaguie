@@ -244,7 +244,17 @@
 	        eventExtra.style.opacity = 1; 
 	      }, 500);
 	    }
-		
+
+		  	    if (text === "6 AGAIN!") {
+	      eventSubtext.innerHTML = `Presented by Reckless Ollie`;
+	      eventExtra.textContent = "SmartGuy is a man of his word and Ollie was indeed first";
+	      eventSubtext.style.display = "block";
+	      eventExtra.style.display = "block";
+	      setTimeout(() => { 
+	        eventSubtext.style.opacity = 1; 
+	        eventExtra.style.opacity = 1; 
+	      }, 500);
+	    }
 		  
 	  }, 1500);
 
