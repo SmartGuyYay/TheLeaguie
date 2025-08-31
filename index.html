@@ -59,17 +59,18 @@
   }
 
   .event-text {
-    color: black;
+    color: white; /* always white */
     font-size: 0;
     opacity: 0;
     font-weight: 900;
     text-align: center;
     animation-fill-mode: forwards;
     transition: font-size 0.3s ease, opacity 0.3s ease;
+    margin-top: 200px; /* shifted down */
   }
 
   .event-subtext {
-    margin-top: 10px;
+    margin-top: 20px; /* spacing */
     text-align: center;
     color: white;
     font-size: 3em;
@@ -78,12 +79,12 @@
   }
   
   .event-extra {
-      margin-top: 10px;
-      text-align: center;
-      color: yellow;
-      font-size: 2em;
-      opacity: 0;
-      transition: opacity 0.5s ease;
+    margin-top: 15px; /* spacing */
+    text-align: center;
+    color: yellow;
+    font-size: 2em;
+    opacity: 0;
+    transition: opacity 0.5s ease;
   }
   
   .event-subtext img {
@@ -110,14 +111,13 @@
     100% { opacity: 0; font-size: 0; }
   }
   
-  
-
   #event-image {
     width: 100vw;     
     height: auto;     
     opacity: 0;
     transform: scaleX(0); 
     transition: transform 1s ease, opacity 1s ease;
+    margin-top: 40px; /* shift images down too */
   }
   #event-image.show {
     opacity: 1;
@@ -171,13 +171,9 @@
 	  lineContainer.style.display = 'block';
 	  eventWrapper.style.display = 'flex';
 
-	  if (text === "GOAL!" || text === "TRY!" || text === "PENALTY!") {
-	    lineContainer.style.background = type;
-	    eventText.style.color = '#000';
-	  } else {
-	    lineContainer.style.background = type;
-	    eventText.style.color = 'white';
-	  }
+	  // always white
+	  lineContainer.style.background = type;
+	  eventText.style.color = 'white';
 
 	  lineContainer.style.animation = 'expandLine 3s forwards';
 	  eventText.style.animation = '';
@@ -192,14 +188,14 @@
 	  setTimeout(() => {
 	    eventText.textContent = text;
 
-	    // Smaller font for Captain's Challenge and Red Line Incoming
+	    // Smaller font for Captain's Challenge and Line Incoming
 	    if (text === "CAPTAIN'S CHALLENGE" || text === "YELLOW LINE INCOMING" || text === "RED LINE INCOMING") {
 	      eventText.style.animation = 'revealTextSmall 1s forwards';
 	    } else {
 	      eventText.style.animation = 'revealText 1s forwards';
 	    }
 
-	    // Subtext + Extra only for TRY!
+	    // TRY!
 	    if (text === "TRY!") {
 	      eventSubtext.innerHTML = `Brought to you by the Discord!<img src="https://static.vecteezy.com/system/resources/previews/023/986/880/non_2x/discord-logo-discord-logo-transparent-discord-icon-transparent-free-free-png.png" alt="Westpac">`;
 	      eventExtra.textContent = "Join today!";
@@ -211,7 +207,7 @@
 	      }, 500);
 	    }
 
-	    // Subtext + Extra only for GOAL!
+	    // GOAL!
 	    if (text === "GOAL!") {
 	      eventSubtext.innerHTML = `Presented by LeaguieGames!<img src="https://yt3.ggpht.com/vDAo7_gXiD26v1b6Z1isCAcbbhRusWwEEhE3ofuh1XIJ-zsuReteQpiu8qIR2qQRyTqu724iPw=s88-c-k-c0x00ffffff-no-rj" alt="Westpac">`;
 	      eventExtra.textContent = "These don't get kicked when Leaguie's playing!";
@@ -223,7 +219,8 @@
 	      }, 500);
 	    }
 
-		  	    if (text === "PENALTY!") {
+	    // PENALTY!
+	    if (text === "PENALTY!") {
 	      eventSubtext.innerHTML = `Presented by Dean!<img src="https://cdn.discordapp.com/avatars/1370535062340374548/f12febffe5fa25dc1b095fa77a214f81.webp?size=160" alt="Westpac">`;
 	      eventExtra.textContent = "TheLeaguie's #1 Gatorade Supplier!";
 	      eventSubtext.style.display = "block";
@@ -232,59 +229,21 @@
 	        eventSubtext.style.opacity = 1; 
 	        eventExtra.style.opacity = 1; 
 	      }, 500);
-	    }
-		
-		  	    if (text === "NO TRY!") {
-	      eventSubtext.innerHTML = `Presented by UpTheMilk! &#x1F95B;`
-	      eventExtra.textContent = "Just saying the Roosters kinda suck cos they lost to milk";
-	      eventSubtext.style.display = "block";
-	      eventExtra.style.display = "block";
-	      setTimeout(() => { 
-	        eventSubtext.style.opacity = 1; 
-	        eventExtra.style.opacity = 1; 
-	      }, 500);
-	    }
-
-		  	    if (text === "6 AGAIN!") {
-	      eventSubtext.innerHTML = `Presented by Reckless Ollie`;
-	      eventExtra.textContent = "SmartGuy is a man of his word and Ollie was indeed first";
-	      eventSubtext.style.display = "block";
-	      eventExtra.style.display = "block";
-	      setTimeout(() => { 
-	        eventSubtext.style.opacity = 1; 
-	        eventExtra.style.opacity = 1; 
-	      }, 500);
-	    }
-
-		  		  	    if (text === "DROPOUT!") {
-	      eventSubtext.innerHTML = `Presented by Tiger Walccer`;
-	      eventExtra.textContent = "He's the OG";
-	      eventSubtext.style.display = "block";
-	      eventExtra.style.display = "block";
-	      setTimeout(() => { 
-	        eventSubtext.style.opacity = 1; 
-	        eventExtra.style.opacity = 1; 
-	      }, 500);
-	    }
-		  
+	    } 
 	  }, 1500);
 
 	  // Fade out
 	  setTimeout(() => {
 	    lineContainer.style.animation = 'closeLine 2.5s forwards';
 
-if (
-  text === "CAPTAIN'S CHALLENGE" || 
-  text === "RED LINE INCOMING" || 
-  text === "CHALLENGE SUCESSFUL" || 
-  text === "INCONCLUSIVE EVIDENCE" || 
-  text === "CHALLENGE UNSUCESSFUL"
-) {
-  eventText.style.animation = 'fadeTextSmall 2.5s forwards';
-} else {
-  eventText.style.animation = 'fadeText 2.5s forwards';
-}
-
+	    if (
+	      text === "CAPTAIN'S CHALLENGE" || 
+	      text === "RED LINE INCOMING" || 
+	      text === "CHALLENGE SUCESSFUL" || 
+	      text === "INCONCLUSIVE EVIDENCE" || 
+	      text === "CHALLENGE UNSUCESSFUL"
+	    ) {
+	      eventText.style.animation = 'fadeTextSmall 2.5s forwards';
 	    } else {
 	      eventText.style.animation = 'fadeText 2.5s forwards';
 	    }
