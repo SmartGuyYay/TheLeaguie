@@ -188,8 +188,15 @@
 	  setTimeout(() => {
 	    eventText.textContent = text;
 
-	    // Smaller font for Captain's Challenge and Line Incoming
-	    if (text === "CAPTAIN'S CHALLENGE" || text === "YELLOW LINE INCOMING" || text === "RED LINE INCOMING") {
+	    // Smaller font for Captain's Challenge + Line Incoming + Challenge Results
+	    if (
+	      text === "CAPTAIN'S CHALLENGE" || 
+	      text === "YELLOW LINE INCOMING" || 
+	      text === "RED LINE INCOMING" ||
+	      text === "CHALLENGE SUCCESSFUL" ||
+	      text === "CHALLENGE UNSUCCESSFUL" ||
+	      text === "INCONCLUSIVE EVIDENCE"
+	    ) {
 	      eventText.style.animation = 'revealTextSmall 1s forwards';
 	    } else {
 	      eventText.style.animation = 'revealText 1s forwards';
@@ -239,9 +246,9 @@
 	    if (
 	      text === "CAPTAIN'S CHALLENGE" || 
 	      text === "RED LINE INCOMING" || 
-	      text === "CHALLENGE SUCESSFUL" || 
+	      text === "CHALLENGE SUCCESSFUL" || 
 	      text === "INCONCLUSIVE EVIDENCE" || 
-	      text === "CHALLENGE UNSUCESSFUL"
+	      text === "CHALLENGE UNSUCCESSFUL"
 	    ) {
 	      eventText.style.animation = 'fadeTextSmall 2.5s forwards';
 	    } else {
@@ -271,8 +278,8 @@
   if (key === 'c') triggerEvent('#186b22', "CAPTAIN'S CHALLENGE");
   
   // Shift combos
-  if (e.shiftKey && key === 'u') triggerEvent('#186b22', "CHALLENGE UNSUCESSFUL");
-  if (e.shiftKey && key === 's') triggerEvent('#186b22', "CHALLENGE SUCESSFUL");
+  if (e.shiftKey && key === 'u') triggerEvent('#186b22', "CHALLENGE UNSUCCESSFUL");
+  if (e.shiftKey && key === 's') triggerEvent('#186b22', "CHALLENGE SUCCESSFUL");
   if (e.shiftKey && key === 'i') triggerEvent('#186b22', "INCONCLUSIVE EVIDENCE");		
 
   if (key === 'n') triggerEvent('red', 'NO TRY!');
