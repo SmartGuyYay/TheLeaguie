@@ -32,7 +32,6 @@
     display: none;
     transform: translate(-50%, -50%);
   }
-
   @keyframes expandLine {
     0% { width: 0; height: 5px; }
     50% { width: 100vw; height: 5px; }
@@ -60,35 +59,34 @@
   }
 
   .event-text {
-    color: white;
+    color: white; /* always white */
     font-size: 0;
     opacity: 0;
     font-weight: 900;
     text-align: center;
     animation-fill-mode: forwards;
     transition: font-size 0.3s ease, opacity 0.3s ease;
-    margin-top: 90px;
-    text-shadow: 0 0 25px #00ff80, 0 0 10px black;
+    margin-top: 90px; /* shifted down */
   }
 
   .event-subtext {
-    margin-top: 20px;
+    margin-top: 20px; /* spacing */
     text-align: center;
     color: white;
     font-size: 3em;
     opacity: 0;
     transition: opacity 0.5s ease;
   }
-
+  
   .event-extra {
-    margin-top: 15px;
+    margin-top: 15px; /* spacing */
     text-align: center;
     color: yellow;
     font-size: 2em;
     opacity: 0;
     transition: opacity 0.5s ease;
   }
-
+  
   .event-subtext img {
     height: 50px;
     vertical-align: middle;
@@ -107,108 +105,30 @@
     0% { opacity: 0; font-size: 1.5em; }
     100% { opacity: 1; font-size: 3em; }
   }
+
   @keyframes fadeTextSmall {
     0% { opacity: 1; font-size: 3em; }
     100% { opacity: 0; font-size: 0; }
   }
-
+  
   #event-image {
-    width: 100vw;
-    height: auto;
+    width: 100vw;     
+    height: auto;     
     opacity: 0;
-    transform: scaleX(0);
+    transform: scaleX(0); 
     transition: transform 1s ease, opacity 1s ease;
-    margin-top: 40px;
+    margin-top: 40px; /* shift images down too */
   }
   #event-image.show {
     opacity: 1;
-    transform: scaleX(1);
+    transform: scaleX(1); 
   }
-
-  /* TRY video */
-  #try-video {
-    position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
-    opacity: 0;
-    z-index: 2000;
-    display: none;
-    transition: opacity 1s ease;
-  }
-  #try-video.show {
-    display: block;
-    opacity: 1;
-  }
-
-  /* TRY text overlay during video */
-  #try-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 2001;
-    color: white;
-    text-shadow: 0 0 25px #00ff80, 0 0 10px black;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 1s ease;
-  }
-  #try-overlay.show { opacity: 1; }
-
-  #try-main {
-    font-size: 10em;
-    font-weight: 900;
-    animation: zoomIn 1s ease forwards;
-  }
-
-  #try-sub {
-    font-size: 3em;
-    margin-top: 10px;
-    opacity: 0;
-    animation: fadeIn 1s ease 1s forwards;
-  }
-
-  #try-extra {
-    font-size: 2em;
-    margin-top: 15px;
-    opacity: 0;
-    color: gold;
-    animation: fadeIn 1s ease 1.5s forwards;
-  }
-
-  @keyframes zoomIn {
-    0% { transform: scale(0.3); opacity: 0; }
-    50% { transform: scale(1.2); opacity: 1; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-
-  @keyframes fadeIn {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fadeOut {
-    0% { opacity: 1; transform: scale(1); }
-    100% { opacity: 0; transform: scale(0.7); }
-  }
-
-  .fade-out {
-    animation: fadeOut 1s forwards;
-  }
-
 </style>
 </head>
 <body>
 
 <div id="background" class="background"></div>
 <div id="line-container" class="line-container"></div>
-
 <div id="event-wrapper" class="event-wrapper">
   <div id="event-text" class="event-text"></div>
   <div id="event-subtext" class="event-subtext"></div>
@@ -216,182 +136,180 @@
   <img id="event-image" src="" alt="Event Image" />
 </div>
 
-<!-- TRY video -->
-<video id="try-video" src="YTDown.com_Shorts_Earth-on-Green-Screen-Background_Media_uP5ICCUNrO8_001_1080p.mp4"></video>
-
-<!-- TRY overlay -->
-<div id="try-overlay">
-  <div id="try-main">TRY!</div>
-  <div id="try-sub">Brought to you by the Discord!</div>
-</div>
-
 <script>
-const background = document.getElementById('background');
-const lineContainer = document.getElementById('line-container');
-const eventWrapper = document.getElementById('event-wrapper');
-const eventText = document.getElementById('event-text');
-const eventSubtext = document.getElementById('event-subtext');
-const eventExtra = document.getElementById('event-extra');
-const eventImage = document.getElementById('event-image');
-const tryVideo = document.getElementById('try-video');
-const tryOverlay = document.getElementById('try-overlay');
+	const background = document.getElementById('background');
+	const lineContainer = document.getElementById('line-container');
+	const eventWrapper = document.getElementById('event-wrapper');
+	const eventText = document.getElementById('event-text');
+	const eventSubtext = document.getElementById('event-subtext');
+	const eventExtra = document.getElementById('event-extra');
+	const eventImage = document.getElementById('event-image');
 
-function playTryVideo() {
-  tryVideo.currentTime = 0;
-  tryVideo.play();
-  tryVideo.classList.add('show');
-  tryOverlay.classList.add('show');
-  tryVideo.style.display = "block";
+	function triggerImage(src) {
+	  eventWrapper.style.display = 'flex';
+	  eventText.style.display = "none"; 
+	  eventSubtext.style.display = "none"; 
+	  eventExtra.style.display = "none"; 
+	  eventImage.src = src;
+	  eventImage.style.display = "block";
 
-  setTimeout(() => {
-    tryOverlay.classList.add('fade-out');
-  }, 7000);
+	  eventImage.classList.remove("show");
+	  void eventImage.offsetWidth; 
+	  setTimeout(() => eventImage.classList.add("show"), 50);
 
-  setTimeout(() => {
-    tryOverlay.classList.remove('show', 'fade-out');
-    tryVideo.classList.remove('show');
-    setTimeout(() => {
-      tryVideo.pause();
-      tryVideo.style.display = "none";
-    }, 1000);
-  }, 10000);
-}
+	  setTimeout(() => {
+	    eventImage.classList.remove("show");
+	    setTimeout(() => {
+	      eventWrapper.style.display = "none";
+	      eventImage.style.display = "none";
+	    }, 1000);
+	  }, 10000);
+	}
 
-function triggerImage(src) {
-  eventWrapper.style.display = 'flex';
-  eventText.style.display = "none";
-  eventSubtext.style.display = "none";
-  eventExtra.style.display = "none";
-  eventImage.src = src;
-  eventImage.style.display = "block";
+	function triggerEvent(type, text) {
+	  background.classList.add('show');
+	  lineContainer.style.display = 'block';
+	  eventWrapper.style.display = 'flex';
 
-  eventImage.classList.remove("show");
-  void eventImage.offsetWidth;
-  setTimeout(() => eventImage.classList.add("show"), 50);
+	  // line background color
+	  lineContainer.style.background = type;
 
-  setTimeout(() => {
-    eventImage.classList.remove("show");
-    setTimeout(() => {
-      eventWrapper.style.display = "none";
-      eventImage.style.display = "none";
-    }, 1000);
-  }, 10000);
-}
+	  // Set eventText color: black only for YELLOW LINE, else white
+	  if (text === "YELLOW LINE INCOMING") {
+	      eventText.style.color = 'black';
+	  } else {
+	      eventText.style.color = 'white';
+	  }
 
-function triggerEvent(type, text) {
-  if (text === "TRY!") {
-    playTryVideo();
-    return;
-  }
+	  lineContainer.style.animation = 'expandLine 3s forwards';
+	  eventText.style.animation = '';
+	  eventText.style.opacity = 0;
+	  eventText.style.fontSize = '0';
+	  eventText.textContent = '';
+	  eventImage.style.display = "none"; 
+	  eventText.style.display = "block";
+	  eventSubtext.style.display = "none"; 
+	  eventExtra.style.display = "none"; 
 
-  background.classList.add('show');
-  lineContainer.style.display = 'block';
-  eventWrapper.style.display = 'flex';
-  lineContainer.style.background = type;
+	  setTimeout(() => {
+	    eventText.textContent = text;
 
-  eventText.style.color = (text === "YELLOW LINE INCOMING") ? 'black' : 'white';
-  lineContainer.style.animation = 'expandLine 3s forwards';
-  eventText.style.animation = '';
-  eventText.style.opacity = 0;
-  eventText.style.fontSize = '0';
-  eventText.textContent = '';
-  eventImage.style.display = "none";
-  eventText.style.display = "block";
-  eventSubtext.style.display = "none";
-  eventExtra.style.display = "none";
+	    // Smaller font for Captain's Challenge + Line Incoming + Challenge Results
+	    if (
+	      text === "CAPTAIN'S CHALLENGE" || 
+	      text === "YELLOW LINE INCOMING" || 
+	      text === "RED LINE INCOMING" ||
+	      text === "CHALLENGE SUCCESSFUL" ||
+	      text === "CHALLENGE UNSUCCESSFUL" ||
+	      text === "INCONCLUSIVE EVIDENCE"
+	    ) {
+	      eventText.style.animation = 'revealTextSmall 1s forwards';
+	    } else {
+	      eventText.style.animation = 'revealText 1s forwards';
+	    }
 
-  setTimeout(() => {
-    eventText.textContent = text;
+	    // TRY!
+	    if (text === "TRY!") {
+	      eventSubtext.innerHTML = `Brought to you by the Discord!<img src="https://static.vecteezy.com/system/resources/previews/023/986/880/non_2x/discord-logo-discord-logo-transparent-discord-icon-transparent-free-free-png.png" alt="Westpac">`;
+	      eventSubtext.style.display = "block";
+	      eventExtra.style.display = "block";
+	      setTimeout(() => { 
+	        eventSubtext.style.opacity = 1; 
+	        eventExtra.style.opacity = 1; 
+	      }, 500);
+	    }
 
-    if (
-      text === "CAPTAIN'S CHALLENGE" ||
-      text === "YELLOW LINE INCOMING" ||
-      text === "RED LINE INCOMING" ||
-      text === "CHALLENGE SUCCESSFUL" ||
-      text === "CHALLENGE UNSUCCESSFUL" ||
-      text === "INCONCLUSIVE EVIDENCE"
-    ) {
-      eventText.style.animation = 'revealTextSmall 1s forwards';
-    } else {
-      eventText.style.animation = 'revealText 1s forwards';
-    }
+	    // GOAL!
+	    if (text === "GOAL!") {
+	      eventSubtext.innerHTML = `Presented by LeaguieGames!<img src="https://yt3.ggpht.com/vDAo7_gXiD26v1b6Z1isCAcbbhRusWwEEhE3ofuh1XIJ-zsuReteQpiu8qIR2qQRyTqu724iPw=s88-c-k-c0x00ffffff-no-rj" alt="Westpac">`;
+	      eventSubtext.style.display = "block";
+	      eventExtra.style.display = "block";
+	      setTimeout(() => { 
+	        eventSubtext.style.opacity = 1; 
+	        eventExtra.style.opacity = 1; 
+	      }, 500);
+	    }
 
-    if (text === "GOAL!") {
-      eventSubtext.innerHTML = `Presented by LeaguieGames!<img src="https://yt3.ggpht.com/vDAo7_gXiD26v1b6Z1isCAcbbhRusWwEEhE3ofuh1XIJ-zsuReteQpiu8qIR2qQRyTqu724iPw=s88-c-k-c0x00ffffff-no-rj" alt="LeaguieGames">`;
-      eventSubtext.style.display = "block";
-      eventExtra.style.display = "block";
-      setTimeout(() => { 
-        eventSubtext.style.opacity = 1; 
-        eventExtra.style.opacity = 1; 
-      }, 500);
-    }
+	    // PENALTY!
+	    if (text === "PENALTY!") {
+	      eventSubtext.innerHTML = `Presented by Dean!<img src="https://cdn.discordapp.com/avatars/1370535062340374548/f12febffe5fa25dc1b095fa77a214f81.webp?size=160" alt="Westpac">`;
+	      eventSubtext.style.display = "block";
+	      eventExtra.style.display = "block";
+	      setTimeout(() => { 
+	        eventSubtext.style.opacity = 1; 
+	        eventExtra.style.opacity = 1; 
+	      }, 500);
+	    } 
+	  }, 1500);
 
-    if (text === "PENALTY!") {
-      eventSubtext.innerHTML = `Presented by Dean!<img src="https://cdn.discordapp.com/avatars/1370535062340374548/f12febffe5fa25dc1b095fa77a214f81.webp?size=160" alt="Dean">`;
-      eventSubtext.style.display = "block";
-      eventExtra.style.display = "block";
-      setTimeout(() => { 
-        eventSubtext.style.opacity = 1; 
-        eventExtra.style.opacity = 1; 
-      }, 500);
-    } 
-  }, 1500);
+	  // Fade out
+	  setTimeout(() => {
+	    lineContainer.style.animation = 'closeLine 2.5s forwards';
 
-  setTimeout(() => {
-    lineContainer.style.animation = 'closeLine 2.5s forwards';
-    eventText.style.animation = 
-      (["CAPTAIN'S CHALLENGE","RED LINE INCOMING","CHALLENGE SUCCESSFUL","INCONCLUSIVE EVIDENCE","CHALLENGE UNSUCCESSFUL"].includes(text))
-      ? 'fadeTextSmall 2.5s forwards' 
-      : 'fadeText 2.5s forwards';
+	    if (
+	      text === "CAPTAIN'S CHALLENGE" || 
+	      text === "RED LINE INCOMING" || 
+	      text === "CHALLENGE SUCCESSFUL" || 
+	      text === "INCONCLUSIVE EVIDENCE" || 
+	      text === "CHALLENGE UNSUCCESSFUL"
+	    ) {
+	      eventText.style.animation = 'fadeTextSmall 2.5s forwards';
+	    } else {
+	      eventText.style.animation = 'fadeText 2.5s forwards';
+	    }
 
-    eventSubtext.style.opacity = 0;
-    eventExtra.style.opacity = 0;
+	    eventSubtext.style.opacity = 0;
+	    eventExtra.style.opacity = 0;
 
-    setTimeout(() => {
-      lineContainer.style.display = 'none';
-      eventWrapper.style.display = 'none';
-      background.classList.remove('show');
-      eventText.className = 'event-text';
-      eventSubtext.innerHTML = '';
-      eventExtra.textContent = '';
-    }, 2500);
-  }, 5000);
-}
+	    setTimeout(() => {
+	      lineContainer.style.display = 'none';
+	      eventWrapper.style.display = 'none';
+	      background.classList.remove('show');
+	      eventText.className = 'event-text';
+	      eventSubtext.innerHTML = '';
+	      eventExtra.textContent = '';
+	    }, 2500);
+	  }, 5000);
+	}
 
-document.addEventListener('keydown', e => {
-  const key = e.key.toLowerCase();
-  if (key === 't') triggerEvent('#186b22', 'TRY!');
-  if (key === 'g') triggerEvent('#186b22', 'GOAL!');
-  if (key === 'p') triggerEvent('#186b22', 'PENALTY!');
-  if (key === 'c') triggerEvent('#186b22', "CAPTAIN'S CHALLENGE");
-  if (e.shiftKey && key === 'u') triggerEvent('#186b22', "CHALLENGE UNSUCCESSFUL");
-  if (e.shiftKey && key === 's') triggerEvent('#186b22', "CHALLENGE SUCCESSFUL");
-  if (e.shiftKey && key === 'i') triggerEvent('#186b22', "INCONCLUSIVE EVIDENCE");
-  if (key === 'n') triggerEvent('red', 'NO TRY!');
-  if (key === 'f') triggerEvent('#186b22', 'FIELD GOAL!');
-  if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING');
-  if (key === 'r') triggerEvent('#ff0000', 'RED LINE INCOMING');
-  if (key === 'd') triggerEvent('#186b22', 'DROPOUT!');
-  if (key === 'b') triggerEvent('#186b22', 'THE BUNKER!');
-  if (key === '6') triggerEvent('#186b22', '6 AGAIN!');
-  if (key === 'e') triggerEvent('gold', 'GOLDEN POINT!');
-  if (key === '1') triggerEvent('red', 'THE 14-0 CURSE IS NOT REAL');
-  if (key === '4') triggerEvent('green', '40/20');
-  if (key === 'l') triggerImage("chancesareyoureabouttolose.webp");
-  if (key === 'w') triggerImage("telstra.jpeg");
-});
+	document.addEventListener('keydown', e => {
+	  const key = e.key.toLowerCase();
 
-window.onload = () => {
-  tryVideo.pause();
-  tryVideo.style.display = 'none';
-  background.classList.remove('show');
-  lineContainer.style.display = 'none';
-  eventWrapper.style.display = 'none';
-  eventImage.style.display = 'none';
-  eventSubtext.style.display = 'none';
-  eventExtra.style.display = 'none';
-};
+	  if (key === 't') triggerEvent('#186b22', 'TRY!');
+	  if (key === 'g') triggerEvent('#186b22', 'GOAL!');
+	  if (key === 'p') triggerEvent('#186b22', 'PENALTY!');
+	  if (key === 'c') triggerEvent('#186b22', "CAPTAIN'S CHALLENGE");
+	  
+	  // Shift combos
+	  if (e.shiftKey && key === 'u') triggerEvent('#186b22', "CHALLENGE UNSUCCESSFUL");
+	  if (e.shiftKey && key === 's') triggerEvent('#186b22', "CHALLENGE SUCCESSFUL");
+	  if (e.shiftKey && key === 'i') triggerEvent('#186b22', "INCONCLUSIVE EVIDENCE");		
+
+	  if (key === 'n') triggerEvent('red', 'NO TRY!');
+	  if (key === 'f') triggerEvent('#186b22', 'FIELD GOAL!');
+	  if (key === 'y') triggerEvent('yellow', 'YELLOW LINE INCOMING');
+	  if (key === 'r') triggerEvent('#ff0000', 'RED LINE INCOMING');
+	  if (key === 'd') triggerEvent('#186b22', 'DROPOUT!');
+	  if (key === 'b') triggerEvent('#186b22', 'THE BUNKER!');
+	  if (key === '6') triggerEvent('#186b22', '6 AGAIN!');
+	  if (key === 'e') triggerEvent('gold', 'GOLDEN POINT!');
+	  if (key === '1') triggerEvent('red', 'THE 14-0 CURSE IS NOT REAL');
+	  if (key === '4') triggerEvent('green', '40/20');
+
+	  if (key === 'l') triggerImage("chancesareyoureabouttolose.webp");
+	  if (key === 'w') triggerImage("telstra.jpeg");
+	});
+
+	window.onload = () => {
+	  background.classList.remove('show');
+	  lineContainer.style.display = 'none';
+	  eventWrapper.style.display = 'none';
+	  eventImage.style.display = 'none';
+	  eventSubtext.style.display = 'none';
+	  eventExtra.style.display = 'none';
+	};
 </script>
+
 
 </body>
 </html>
